@@ -21,6 +21,37 @@ const popularMonsters = monsters.filter(m =>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"mainEntity": [
+				{
+					"@type": "Question",
+					"name": "Can you play Tibia on mobile?",
+					"acceptedAnswer": { "@type": "Answer", "text": "Yes. There are browser-based clients like Minibia that let you play Tibia in your phone's browser without downloading anything." }
+				},
+				{
+					"@type": "Question",
+					"name": "What is the difference between Tibia and TibiaME?",
+					"acceptedAnswer": { "@type": "Answer", "text": "TibiaME is a separate mobile game by CipSoft with a different world and simplified gameplay. It's not the same game as Tibia. If you want the original Tibia experience on mobile, you need a browser-based client." }
+				},
+				{
+					"@type": "Question",
+					"name": "What vocation should I pick?",
+					"acceptedAnswer": { "@type": "Answer", "text": "Knights are tanky and beginner-friendly, Paladins are balanced ranged fighters, Sorcerers deal the most damage, and Druids are the best healers." }
+				},
+				{
+					"@type": "Question",
+					"name": "Where should I hunt at level 30?",
+					"acceptedAnswer": { "@type": "Answer", "text": "Cyclopses and Minotaur Guards are solid choices around level 30." }
+				},
+				{
+					"@type": "Question",
+					"name": "How much experience do I need to reach level 100?",
+					"acceptedAnswer": { "@type": "Answer", "text": "15,694,800 experience points." }
+				}
+			]
+		})} />
 	</head>
 	<body>
 		<Header />
