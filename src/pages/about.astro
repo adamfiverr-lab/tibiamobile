@@ -1,45 +1,140 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { MINIBIA_URL } from '../consts';
 
-const title = 'About Tibia Mobile - Playing Tibia on Your Phone';
-const description = 'TibiaMobile.com is your resource for playing the classic MMORPG Tibia on mobile devices via Minibia. Guides, tips, and everything Tibia Mobile.';
+const title = 'About Tibia Mobile - Community Wiki, Guides & Tools';
+const description = 'TibiaMobile.com is a community resource for the classic MMORPG Tibia. Learn about our wiki, guides, tools, and the team behind this fan site.';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "AboutPage",
+			"name": title,
+			"description": description,
+			"mainEntityOfPage": "https://tibiamobile.com/about",
+			"publisher": {
+				"@type": "Organization",
+				"name": "Tibia Mobile",
+				"url": "https://tibiamobile.com",
+				"logo": {
+					"@type": "ImageObject",
+					"url": "https://tibiamobile.com/icon-512.png"
+				}
+			}
+		})} />
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class="about-page">
+			<Breadcrumb items={[{ label: "Home", href: "/" }, { label: "About" }]} />
 			<h1>About Tibia Mobile</h1>
-			<p>
-				<strong>TibiaMobile.com</strong> is a community resource dedicated to playing
-				<a href="https://www.tibia.com" target="_blank" rel="noopener">Tibia</a> — one of the world's oldest
-				and most iconic MMORPGs — on mobile devices.
-			</p>
-			<p>
-				We provide guides, tips, hunting spot recommendations, vocation advice, and everything
-				you need to enjoy Tibia on your phone or tablet through
-				<a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia</a>, the browser-based Tibia mobile client.
-			</p>
-			<h2>What is Minibia?</h2>
-			<p>
-				<a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia</a> is a mobile-optimized Tibia client
-				that runs directly in your web browser. No downloads, no app store — just visit Minibia.com and start playing
-				the classic Tibia experience on any device.
-			</p>
-			<h2>Disclaimer</h2>
-			<p>
-				TibiaMobile.com is a fan site. Tibia is a registered trademark of
-				<a href="https://www.cipsoft.com" target="_blank" rel="noopener">CipSoft GmbH</a>.
-				This site is not affiliated with or endorsed by CipSoft.
-			</p>
+
+			<section class="about-intro">
+				<p>
+					<strong>TibiaMobile.com</strong> is a community resource dedicated to playing
+					<a href="https://www.tibia.com" target="_blank" rel="noopener noreferrer">Tibia</a> — one of the world's oldest
+					and most iconic MMORPGs — on mobile devices. We've been playing Tibia since the early 2000s and built this site
+					to share that knowledge with both returning veterans and brand new players.
+				</p>
+			</section>
+
+			<section>
+				<h2>What We Offer</h2>
+				<p>Every piece of content on TibiaMobile.com is written and maintained by experienced Tibia players. We focus on accuracy and practical advice rather than just listing numbers.</p>
+				<ul>
+					<li><strong><a href="/wiki/monsters">Monster Database</a></strong> — 186 creatures with stats, loot tables, elemental weaknesses, locations, and difficulty ratings. Every entry is verified against the actual game data.</li>
+					<li><strong><a href="/wiki/spells">Spell List</a></strong> — Complete spell reference organized by vocation with mana costs, level requirements, and the spell words you need to type in-game.</li>
+					<li><strong><a href="/wiki/vocations">Vocation Guide</a></strong> — Detailed breakdown of all four vocations including HP/mana gain per level, strengths, weaknesses, key spells, and equipment recommendations.</li>
+					<li><strong><a href="/tools">Calculators</a></strong> — Experience calculator, damage calculator, and skill training estimator built with the real Tibia formulas.</li>
+					<li><strong><a href="/blog">Guides & Blog</a></strong> — In-depth articles covering hunting spots by level, money-making strategies, PvP tips, quest walkthroughs, and vocation advice for mobile play.</li>
+					<li><strong><a href="/guide">Beginner Guide</a></strong> — A comprehensive getting-started guide covering everything from creating an account to choosing a vocation and surviving your first hunts.</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>What is Minibia?</h2>
+				<p>
+					<a href={MINIBIA_URL} target="_blank" rel="noopener noreferrer">Minibia</a> is a browser-based Tibia client
+					optimized for mobile devices. It lets you play classic Tibia directly in your phone's web browser — no downloads,
+					no app store, no special setup required. It works on Android, iPhone, iPad, and desktop browsers.
+				</p>
+				<p>
+					TibiaMobile.com exists as a companion resource for Minibia players, though our wiki and guides are useful
+					for anyone playing Tibia regardless of which client they use.
+				</p>
+			</section>
+
+			<section>
+				<h2>How We Maintain Quality</h2>
+				<p>
+					All game data on this site — monster stats, spell values, experience formulas — is sourced directly from Tibia 7.6
+					game files and cross-checked for accuracy. Our guides are written from firsthand gameplay experience, not
+					auto-generated or scraped from other wikis. When game mechanics are complex or debated, we explain the nuances
+					rather than oversimplifying.
+				</p>
+				<p>
+					The site is built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>,
+					a modern static site generator that produces fast, lightweight pages. Every page is pre-rendered HTML for
+					instant loading and full search engine accessibility.
+				</p>
+			</section>
+
+			<section>
+				<h2>Contact</h2>
+				<p>
+					Found an error in our data? Have a suggestion for a new guide or tool? We welcome feedback from the community.
+					The best way to reach us is through the <a href="https://github.com/adamfiverr-lab/tibiamobile" target="_blank" rel="noopener noreferrer">GitHub repository</a>
+					where you can open an issue or submit a pull request.
+				</p>
+			</section>
+
+			<section>
+				<h2>Disclaimer</h2>
+				<p>
+					TibiaMobile.com is an independent fan site. Tibia is a registered trademark of
+					<a href="https://www.cipsoft.com" target="_blank" rel="noopener noreferrer">CipSoft GmbH</a>.
+					This site is not affiliated with, endorsed by, or officially connected to CipSoft in any way.
+					All game content and imagery referenced belongs to their respective owners.
+				</p>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.about-page {
+		max-width: 720px;
+	}
+	.about-intro p {
+		font-size: 1.1em;
+		line-height: 1.7;
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		color: var(--text);
+	}
+	section {
+		margin-bottom: 2.5em;
+	}
+	h2 {
+		color: var(--accent);
+		margin-bottom: 0.75em;
+	}
+	ul {
+		padding-left: 1.5em;
+	}
+	li {
+		margin-bottom: 0.6em;
+		line-height: 1.6;
+	}
+	p {
+		line-height: 1.7;
+	}
+</style>

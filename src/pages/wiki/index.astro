@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import monsters from '../../data/monsters.json';
@@ -18,6 +19,8 @@ const description = 'Comprehensive Tibia wiki with spell lists, vocation details
 			"@type": "CollectionPage",
 			"name": title,
 			"description": description,
+			"datePublished": "2026-03-14T00:00:00Z",
+			"dateModified": "2026-03-18T00:00:00Z",
 			"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
 			"mainEntityOfPage": "https://tibiamobile.com/wiki"
 		})} />
@@ -25,6 +28,7 @@ const description = 'Comprehensive Tibia wiki with spell lists, vocation details
 	<body>
 		<Header />
 		<main>
+			<Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Wiki" }]} />
 			<h1>Tibia Wiki</h1>
 			<p class="lead">
 				Quick reference guides for Tibia spells, vocations, and game mechanics.

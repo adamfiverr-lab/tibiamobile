@@ -1,0 +1,110 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+const title = '404 - Page Not Found | Tibia Mobile';
+const description = 'The page you are looking for does not exist. Browse our Tibia wiki, guides, and tools.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<meta name="robots" content="noindex" />
+	</head>
+	<body>
+		<Header />
+		<main class="error-page">
+			<h1>404</h1>
+			<p class="error-message">This page doesn't exist. Maybe the URL is wrong, or the page was moved.</p>
+
+			<div class="error-links">
+				<h2>Try one of these instead:</h2>
+				<div class="link-grid">
+					<a href="/" class="card error-card">
+						<strong>Home</strong>
+						<span>Back to the main page</span>
+					</a>
+					<a href="/wiki/monsters" class="card error-card">
+						<strong>Monster Database</strong>
+						<span>Browse all creatures</span>
+					</a>
+					<a href="/wiki/spells" class="card error-card">
+						<strong>Spell List</strong>
+						<span>All spells by vocation</span>
+					</a>
+					<a href="/tools" class="card error-card">
+						<strong>Tools</strong>
+						<span>Calculators and utilities</span>
+					</a>
+					<a href="/guide" class="card error-card">
+						<strong>Beginner Guide</strong>
+						<span>Getting started with Tibia</span>
+					</a>
+					<a href="/blog" class="card error-card">
+						<strong>Blog</strong>
+						<span>Guides, tips, and news</span>
+					</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.error-page {
+		text-align: center;
+		padding: 4em 1em;
+	}
+	.error-page h1 {
+		font-size: 5em;
+		color: var(--accent);
+		margin-bottom: 0.1em;
+		letter-spacing: -0.03em;
+	}
+	.error-message {
+		color: var(--text-muted);
+		font-size: 1.15em;
+		margin-bottom: 3em;
+	}
+	.error-links h2 {
+		font-size: 1.2em;
+		margin-bottom: 1em;
+	}
+	.link-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.75em;
+		max-width: 700px;
+		margin: 0 auto;
+		text-align: left;
+	}
+	.error-card {
+		display: block;
+		text-decoration: none;
+		padding: 1em 1.25em;
+	}
+	.error-card:hover {
+		text-decoration: none;
+	}
+	.error-card strong {
+		display: block;
+		color: var(--text-heading);
+		font-size: 0.95em;
+		margin-bottom: 0.2em;
+	}
+	.error-card span {
+		display: block;
+		color: var(--text-muted);
+		font-size: 0.8em;
+	}
+	@media (max-width: 720px) {
+		.error-page h1 { font-size: 3.5em; }
+		.link-grid { grid-template-columns: 1fr 1fr; }
+	}
+	@media (max-width: 480px) {
+		.link-grid { grid-template-columns: 1fr; }
+	}
+</style>

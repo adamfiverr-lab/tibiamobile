@@ -30,6 +30,8 @@ const ogImageURL = new URL(ogImage, Astro.site);
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#c43c3c" />
 
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -51,6 +53,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="robots" content="index, follow" />
+<meta name="author" content="Tibia Mobile" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
@@ -65,11 +68,11 @@ const ogImageURL = new URL(ogImage, Astro.site);
 {article?.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={ogImageURL} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify({
@@ -78,9 +81,5 @@ const ogImageURL = new URL(ogImage, Astro.site);
 	"name": "Tibia Mobile",
 	"url": "https://tibiamobile.com",
 	"description": "Community wiki, guides, and tools for the classic MMORPG Tibia",
-	"potentialAction": {
-		"@type": "SearchAction",
-		"target": "https://tibiamobile.com/blog?q={search_term_string}",
-		"query-input": "required name=search_term_string"
-	}
+	"inLanguage": "en"
 })} />

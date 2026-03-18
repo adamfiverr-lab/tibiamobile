@@ -1,0 +1,26 @@
+{
+	"name": "Tibia Mobile - Wiki, Guides & Tools",
+	"short_name": "TibiaMobile",
+	"description": "Community wiki, guides, and tools for the classic MMORPG Tibia.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#0c0c0e",
+	"theme_color": "#c43c3c",
+	"icons": [
+		{
+			"src": "/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png"
+		}
+	]
+}

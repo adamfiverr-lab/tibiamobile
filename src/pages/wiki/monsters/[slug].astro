@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../../../components/BaseHead.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import monsters from '../../../data/monsters.json';
@@ -105,9 +106,7 @@ const jsonLd = {
 	<body>
 		<Header />
 		<main class="monster-page">
-			<nav class="breadcrumb">
-				<a href="/wiki">Wiki</a> <span>/</span> <a href="/wiki/monsters">Monsters</a> <span>/</span> <span>{monster.name}</span>
-			</nav>
+			<Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Wiki", href: "/wiki" }, { label: "Monsters", href: "/wiki/monsters" }, { label: monster.name }]} />
 
 			<h1>{monster.name}</h1>
 
@@ -220,17 +219,6 @@ const jsonLd = {
 	.monster-page {
 		width: 900px;
 		max-width: calc(100% - 2em);
-	}
-	.breadcrumb {
-		font-size: 0.85em;
-		color: var(--text-muted);
-		margin-bottom: 1.5em;
-	}
-	.breadcrumb a {
-		color: var(--accent);
-	}
-	.breadcrumb span {
-		margin: 0 0.3em;
 	}
 	.monster-meta {
 		display: flex;
