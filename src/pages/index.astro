@@ -3,156 +3,131 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { MINIBIA_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import monsters from '../data/monsters.json';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const posts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 3);
+	.slice(0, 4);
+
+const monsterCount = monsters.length;
+const popularMonsters = monsters.filter(m =>
+	['dragon', 'demon', 'minotaur', 'cyclops', 'giant-spider', 'dragon-lord'].includes(m.slug)
+);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<script type="application/ld+json" set:html={JSON.stringify({
-			"@context": "https://schema.org",
-			"@type": "SoftwareApplication",
-			"name": "Minibia - Tibia Mobile",
-			"operatingSystem": "Android, iOS, Web Browser",
-			"applicationCategory": "GameApplication",
-			"applicationSubCategory": "MMORPG",
-			"description": "Play the classic MMORPG Tibia on your mobile phone. Hunt monsters, level up, and explore the world of Tibia from anywhere.",
-			"url": "https://minibia.com",
-			"offers": {
-				"@type": "Offer",
-				"price": "0",
-				"priceCurrency": "USD"
-			}
-		})} />
 	</head>
 	<body>
 		<Header />
 
-		<!-- Hero Section -->
-		<section class="hero">
-			<div class="hero-inner">
-				<h1>Play <span class="highlight">Tibia</span> on Your Mobile Phone</h1>
-				<p class="hero-subtitle">
-					The classic MMORPG you love, now playable on any device. Hunt monsters, explore dungeons,
-					and level up your character — all from your phone or tablet.
-				</p>
-				<div class="hero-cta">
-					<a href={MINIBIA_URL} class="cta-button" target="_blank" rel="noopener">
-						Play Free on Minibia
-					</a>
-					<a href="/guide" class="cta-secondary">Read the Guide</a>
-				</div>
-			</div>
-		</section>
-
-		<!-- What is Tibia Mobile -->
 		<main>
-			<section class="content-section">
-				<h2>What is Tibia Mobile?</h2>
+			<!-- Intro - short and honest -->
+			<section class="intro">
+				<h1>Tibia<span class="highlight">Mobile</span></h1>
 				<p>
-					<strong>Tibia</strong> is one of the oldest MMORPGs ever created, first released in 1997 by CipSoft.
-					For decades, players have <a href="/wiki">explored its vast world</a>, battled monsters, and built communities —
-					but only from a desktop computer. <strong>Minibia</strong> changes that by bringing the full
-					Tibia experience to your mobile device.
-				</p>
-				<p>
-					Whether you're on Android, iPhone, or any device with a web browser, you can now dive into the
-					world of Tibia wherever you are. <a href="/guide">Learn how to get started</a> — just visit
-					<a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia.com</a> and start playing.
+					Community wiki, tools, and guides for the classic MMORPG Tibia.
+					Everything you need to play — whether you're on desktop or mobile.
 				</p>
 			</section>
 
-			<!-- Features -->
+			<!-- Quick Links Grid - the hub -->
+			<section class="hub-grid">
+				<a href="/wiki/monsters" class="hub-card">
+					<span class="hub-icon">&#x1F409;</span>
+					<h2>Monster Database</h2>
+					<p>{monsterCount} creatures with stats, loot, and weaknesses</p>
+				</a>
+				<a href="/wiki/spells" class="hub-card">
+					<span class="hub-icon">&#x2728;</span>
+					<h2>Spell List</h2>
+					<p>All spells by vocation with mana costs and levels</p>
+				</a>
+				<a href="/tools" class="hub-card">
+					<span class="hub-icon">&#x1F4CA;</span>
+					<h2>Calculators</h2>
+					<p>XP, damage, and skill training calculators</p>
+				</a>
+				<a href="/wiki/vocations" class="hub-card">
+					<span class="hub-icon">&#x2694;</span>
+					<h2>Vocations</h2>
+					<p>Stats, strengths, and gear for every vocation</p>
+				</a>
+				<a href="/guide" class="hub-card">
+					<span class="hub-icon">&#x1F4D6;</span>
+					<h2>Beginner Guide</h2>
+					<p>Getting started, controls, and first hunts</p>
+				</a>
+				<a href="/play" class="hub-card">
+					<span class="hub-icon">&#x1F4F1;</span>
+					<h2>Play on Mobile</h2>
+					<p>How to play Tibia in your phone's browser</p>
+				</a>
+			</section>
+
+			<!-- Popular Monsters - shows this is a real wiki -->
 			<section class="content-section">
-				<h2>Why Play Tibia on Mobile?</h2>
-				<div class="feature-grid">
-					<div class="card">
-						<h3>Play Anywhere</h3>
-						<p>Hunt during your commute, trade while waiting in line, or explore dungeons from your couch. Tibia goes wherever you go.</p>
-					</div>
-					<div class="card">
-						<h3>No Download Needed</h3>
-						<p>Minibia runs in your mobile browser. No app store, no installation, no storage space. Just open and play.</p>
-					</div>
-					<div class="card">
-						<h3>Classic Tibia Experience</h3>
-						<p>The same monsters, spells, quests, and world you know from Tibia — faithfully recreated for mobile screens with touch controls.</p>
-					</div>
-					<div class="card">
-						<h3>Free to Play</h3>
-						<p>Jump into the game at no cost. Create your character, choose your <a href="/wiki/vocations">vocation</a>, and start your adventure immediately.</p>
-					</div>
+				<div class="section-header">
+					<h2>Popular Monsters</h2>
+					<a href="/wiki/monsters">View all {monsterCount} &rarr;</a>
+				</div>
+				<div class="monster-grid">
+					{popularMonsters.map((m) => (
+						<a href={`/wiki/monsters/${m.slug}`} class="card monster-card">
+							<div class="monster-info">
+								<h3>{m.name}</h3>
+								<div class="monster-stats">
+									<span class="stat">HP {m.hp.toLocaleString()}</span>
+									<span class="stat">Exp {m.exp.toLocaleString()}</span>
+								</div>
+							</div>
+						</a>
+					))}
 				</div>
 			</section>
 
-			<!-- How to Play -->
+			<!-- Latest Posts -->
 			<section class="content-section">
-				<h2>How to Play Tibia on Your Phone</h2>
-				<ol class="steps">
-					<li>
-						<strong>Open your mobile browser</strong> — Chrome, Safari, Firefox, or any modern browser works.
-					</li>
-					<li>
-						<strong>Go to <a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia.com</a></strong> — the mobile-optimized Tibia client.
-					</li>
-					<li>
-						<strong>Create your character</strong> — pick a name and start as a Rookie.
-					</li>
-					<li>
-						<strong>Choose your <a href="/wiki/vocations">vocation</a></strong> — become a Knight, Paladin, Sorcerer, or Druid at level 8.
-					</li>
-					<li>
-						<strong>Explore and hunt</strong> — battle monsters, complete quests, and level up your character.
-					</li>
-				</ol>
+				<div class="section-header">
+					<h2>Latest Guides</h2>
+					<a href="/blog">View all &rarr;</a>
+				</div>
+				<div class="post-list">
+					{posts.map((post) => (
+						<a href={`/blog/${post.id}/`} class="post-item">
+							<h3>{post.data.title}</h3>
+							<p>{post.data.description}</p>
+						</a>
+					))}
+				</div>
 			</section>
 
-			<!-- Latest Blog Posts -->
-			{posts.length > 0 && (
-				<section class="content-section">
-					<h2>Latest Guides & News</h2>
-					<div class="post-grid">
-						{posts.map((post) => (
-							<a href={`/blog/${post.id}/`} class="card post-card">
-								<h3>{post.data.title}</h3>
-								<p>{post.data.description}</p>
-							</a>
-						))}
-					</div>
-					<p style="text-align: center; margin-top: 1.5em;">
-						<a href="/blog">View all posts &rarr;</a>
-					</p>
-				</section>
-			)}
-
-			<!-- FAQ for SEO -->
+			<!-- FAQ - genuine answers, not a Minibia ad -->
 			<section class="content-section">
 				<h2>Frequently Asked Questions</h2>
 				<div class="faq">
 					<details>
 						<summary>Can you play Tibia on mobile?</summary>
-						<p>Yes! <a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia</a> lets you play Tibia directly in your mobile browser on any Android or iOS device. No app download is required.</p>
-					</details>
-					<details>
-						<summary>Is Tibia Mobile free to play?</summary>
-						<p>Yes, Minibia is completely free to play. You can create a character and start playing right away at no cost.</p>
+						<p>Yes. There are browser-based clients like <a href="https://minibia.com" target="_blank" rel="noopener">Minibia</a> that let you play Tibia in your phone's browser without downloading anything. See our <a href="/play">Play on Mobile</a> page for details.</p>
 					</details>
 					<details>
 						<summary>What is the difference between Tibia and TibiaME?</summary>
-						<p>TibiaME is CipSoft's official mobile game, but it's a different game from the original Tibia. Minibia brings the actual classic Tibia experience — the same world, monsters, and gameplay — to your mobile device.</p>
+						<p>TibiaME is a separate mobile game by CipSoft with a different world and simplified gameplay. It's not the same game as Tibia. If you want the original Tibia experience on mobile, you need a browser-based client. We have a <a href="/blog/tibia-vs-tibiame-whats-the-difference/">full comparison</a>.</p>
 					</details>
 					<details>
-						<summary>Do I need to download an app to play Tibia on my phone?</summary>
-						<p>No. Minibia is a web-based client that runs in your mobile browser. Just visit Minibia.com and start playing — no downloads, no app store.</p>
+						<summary>What vocation should I pick?</summary>
+						<p>It depends on your playstyle. Knights are tanky and beginner-friendly, Paladins are balanced ranged fighters, Sorcerers deal the most damage, and Druids are the best healers. See our <a href="/wiki/vocations">vocation guide</a> for full details.</p>
 					</details>
 					<details>
-						<summary>What devices can I play Tibia Mobile on?</summary>
-						<p>Any device with a modern web browser works — Android phones, iPhones, iPads, tablets, and even desktop computers. If you have a browser, you can play.</p>
+						<summary>Where should I hunt at level 30?</summary>
+						<p><a href="/wiki/monsters/cyclops">Cyclopses</a> and <a href="/wiki/monsters/minotaur-guard">Minotaur Guards</a> are solid choices around level 30. Check our <a href="/blog/tibia-mobile-hunting-guide/">hunting guide</a> for recommendations at every level range.</p>
+					</details>
+					<details>
+						<summary>How much experience do I need to reach level 100?</summary>
+						<p>15,694,800 experience points. You can use our <a href="/tools/experience-calculator">XP calculator</a> to plan any level range.</p>
 					</details>
 				</div>
 			</section>
@@ -163,119 +138,138 @@ const posts = (await getCollection('blog'))
 </html>
 
 <style>
-	/* Hero */
-	.hero {
-		background: linear-gradient(180deg, rgba(200, 168, 78, 0.08) 0%, transparent 100%);
-		border-bottom: 1px solid var(--border);
-		padding: 5em 1.5em 4em;
+	/* Intro */
+	.intro {
 		text-align: center;
+		padding: 2em 0 1em;
 	}
-	.hero-inner {
-		max-width: 780px;
-		margin: 0 auto;
-	}
-	.hero h1 {
-		font-size: 3em;
-		margin-bottom: 0.5em;
-		line-height: 1.1;
+	.intro h1 {
+		font-size: 2.5em;
+		margin-bottom: 0.25em;
+		letter-spacing: -0.02em;
 	}
 	.highlight {
 		color: var(--accent);
 	}
-	.hero-subtitle {
-		font-size: 1.2em;
+	.intro p {
 		color: var(--text-muted);
-		margin-bottom: 2em;
-		max-width: 600px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-	.hero-cta {
-		display: flex;
-		gap: 1em;
-		justify-content: center;
-		align-items: center;
-		flex-wrap: wrap;
-	}
-	.cta-secondary {
-		color: var(--accent);
-		font-weight: 700;
-		padding: 0.75em 2em;
-		border: 2px solid var(--accent);
-		border-radius: 8px;
-		transition: background 0.2s;
-	}
-	.cta-secondary:hover {
-		background: rgba(200, 168, 78, 0.1);
-		text-decoration: none;
+		font-size: 1.1em;
+		max-width: 500px;
+		margin: 0 auto;
 	}
 
-	/* Content sections */
+	/* Hub Grid */
+	.hub-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.75em;
+		margin: 2em 0 3em;
+	}
+	.hub-card {
+		display: block;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 1.25em;
+		text-decoration: none;
+		transition: border-color 0.2s, background 0.2s;
+	}
+	.hub-card:hover {
+		border-color: var(--accent);
+		background: var(--bg-card-hover);
+		text-decoration: none;
+	}
+	.hub-icon {
+		font-size: 1.5em;
+		display: block;
+		margin-bottom: 0.4em;
+	}
+	.hub-card h2 {
+		font-size: 1.05em;
+		color: var(--text-heading);
+		margin-bottom: 0.25em;
+	}
+	.hub-card p {
+		font-size: 0.8em;
+		color: var(--text-muted);
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	/* Section headers */
+	.section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-bottom: 1em;
+	}
+	.section-header h2 {
+		margin: 0;
+	}
+	.section-header a {
+		font-size: 0.9em;
+	}
+
 	.content-section {
 		margin-bottom: 3em;
 	}
-	.content-section h2 {
+	.content-section > h2 {
 		margin-bottom: 1em;
-		color: var(--accent);
 	}
 
-	/* Feature grid */
-	.feature-grid {
+	/* Monster grid */
+	.monster-grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1em;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.75em;
 	}
-	.feature-grid h3 {
-		color: var(--text-heading);
-		font-size: 1.1em;
-		margin-bottom: 0.5em;
-	}
-	.feature-grid p {
-		color: var(--text-muted);
-		font-size: 0.95em;
-		margin: 0;
-	}
-
-	/* Steps */
-	.steps {
-		padding-left: 1.5em;
-	}
-	.steps li {
-		margin-bottom: 0.75em;
-		color: var(--text);
-	}
-
-	/* CTA Box */
-	.cta-box {
-		text-align: center;
-		padding: 2em;
-		background: var(--bg-card);
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		margin-top: 2em;
-	}
-	.cta-box p {
-		font-size: 1.2em;
-		margin-bottom: 1em;
-		color: var(--text-heading);
-	}
-
-	/* Post grid */
-	.post-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1em;
-	}
-	.post-card {
+	.monster-card {
 		display: block;
 		text-decoration: none;
+		padding: 1em;
 	}
-	.post-card h3 {
+	.monster-card h3 {
 		font-size: 1em;
 		color: var(--text-heading);
-		margin-bottom: 0.5em;
+		margin-bottom: 0.4em;
 	}
-	.post-card p {
+	.monster-stats {
+		display: flex;
+		gap: 0.75em;
+	}
+	.stat {
+		font-size: 0.8em;
+		color: var(--text-muted);
+		background: rgba(200, 168, 78, 0.08);
+		padding: 0.15em 0.5em;
+		border-radius: 4px;
+	}
+
+	/* Post list */
+	.post-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+	.post-item {
+		display: block;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1em 1.25em;
+		text-decoration: none;
+		transition: border-color 0.2s;
+	}
+	.post-item:hover {
+		border-color: var(--accent);
+		text-decoration: none;
+	}
+	.post-item h3 {
+		font-size: 1em;
+		color: var(--text-heading);
+		margin-bottom: 0.2em;
+	}
+	.post-item p {
 		font-size: 0.85em;
 		color: var(--text-muted);
 		margin: 0;
@@ -291,7 +285,7 @@ const posts = (await getCollection('blog'))
 		background: var(--bg-card);
 		border: 1px solid var(--border);
 		border-radius: 8px;
-		padding: 1em 1.5em;
+		padding: 1em 1.25em;
 	}
 	details[open] {
 		border-color: var(--accent);
@@ -319,10 +313,12 @@ const posts = (await getCollection('blog'))
 	}
 
 	@media (max-width: 720px) {
-		.hero { padding: 3em 1em 2.5em; }
-		.hero h1 { font-size: 2em; }
-		.hero-subtitle { font-size: 1em; }
-		.feature-grid { grid-template-columns: 1fr; }
-		.post-grid { grid-template-columns: 1fr; }
+		.intro h1 { font-size: 2em; }
+		.hub-grid { grid-template-columns: 1fr 1fr; }
+		.monster-grid { grid-template-columns: 1fr 1fr; }
+	}
+	@media (max-width: 480px) {
+		.hub-grid { grid-template-columns: 1fr; }
+		.monster-grid { grid-template-columns: 1fr; }
 	}
 </style>

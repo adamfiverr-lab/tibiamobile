@@ -1,4 +1,4 @@
-export const SITE_TITLE = 'Tibia Mobile - Play Tibia on Your Phone | Minibia';
+export const SITE_TITLE = 'Tibia Mobile - Wiki, Guides & Tools for Tibia';
 export const SITE_DESCRIPTION =
-	'Play Tibia on your mobile phone. Minibia brings the classic MMORPG Tibia experience to Android and iOS. Hunt monsters, explore Tibia, and level up anywhere.';
+	'Community wiki, guides, and tools for the classic MMORPG Tibia. Monster database, spell lists, experience calculators, vocation guides, and more.';
 export const MINIBIA_URL = 'https://minibia.com';

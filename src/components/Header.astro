@@ -1,5 +1,4 @@
 ---
-import { MINIBIA_URL } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 ---
 
@@ -9,17 +8,13 @@ import HeaderLink from './HeaderLink.astro';
 			<span class="logo-text">Tibia<strong>Mobile</strong></span>
 		</a>
 		<div class="nav-links" id="nav-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/play">Play Now</HeaderLink>
-			<HeaderLink href="/guide">Guide</HeaderLink>
 			<HeaderLink href="/wiki">Wiki</HeaderLink>
+			<HeaderLink href="/wiki/monsters">Monsters</HeaderLink>
+			<HeaderLink href="/wiki/spells">Spells</HeaderLink>
 			<HeaderLink href="/tools">Tools</HeaderLink>
+			<HeaderLink href="/guide">Guide</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
-			<a href={MINIBIA_URL} class="mobile-cta" target="_blank" rel="noopener">Play on Minibia</a>
 		</div>
-		<a href={MINIBIA_URL} class="cta-button-header desktop-only" target="_blank" rel="noopener">
-			Play on Minibia
-		</a>
 		<button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
 			<span></span>
 			<span></span>
@@ -84,9 +79,6 @@ import HeaderLink from './HeaderLink.astro';
 		color: var(--text-heading);
 		background: rgba(200, 168, 78, 0.1);
 	}
-	.mobile-cta {
-		display: none;
-	}
 	.hamburger {
 		display: none;
 		flex-direction: column;
@@ -120,9 +112,6 @@ import HeaderLink from './HeaderLink.astro';
 		.hamburger {
 			display: flex;
 		}
-		.desktop-only {
-			display: none;
-		}
 		.nav-links {
 			display: none;
 			position: absolute;
@@ -141,16 +130,6 @@ import HeaderLink from './HeaderLink.astro';
 		.nav-links :global(a) {
 			padding: 0.75em;
 			font-size: 1em;
-		}
-		.mobile-cta {
-			display: block;
-			margin-top: 0.5em;
-			padding: 0.75em;
-			background: var(--cta-green);
-			color: #fff !important;
-			border-radius: 8px;
-			text-align: center;
-			font-weight: 700;
 		}
 		nav {
 			padding: 0;

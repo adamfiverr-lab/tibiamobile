@@ -1,5 +1,4 @@
 ---
-import { MINIBIA_URL } from '../consts';
 const today = new Date();
 ---
 
@@ -7,21 +6,23 @@ const today = new Date();
 	<div class="footer-inner">
 		<div class="footer-brand">
 			<span class="logo-text">Tibia<strong>Mobile</strong></span>
-			<p>Your guide to playing Tibia on mobile devices. Powered by <a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia</a>.</p>
+			<p>A community resource for Tibia players. Guides, tools, and wiki content for the classic MMORPG.</p>
 		</div>
 		<div class="footer-links">
-			<h4>Content</h4>
-			<a href="/play">Play Tibia Mobile</a>
+			<h4>Wiki</h4>
+			<a href="/wiki/monsters">Monsters</a>
+			<a href="/wiki/spells">Spells</a>
+			<a href="/wiki/vocations">Vocations</a>
+		</div>
+		<div class="footer-links">
+			<h4>Resources</h4>
+			<a href="/tools">Tools</a>
 			<a href="/guide">Beginner Guide</a>
 			<a href="/blog">Blog</a>
 		</div>
-		<div class="footer-links">
-			<h4>Play</h4>
-			<a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia.com</a>
-		</div>
 	</div>
 	<div class="footer-bottom">
-		<p>&copy; {today.getFullYear()} TibiaMobile.com &mdash; Not affiliated with CipSoft GmbH. Tibia is a registered trademark of CipSoft GmbH.</p>
+		<p>&copy; {today.getFullYear()} TibiaMobile.com &mdash; A fan site. Not affiliated with CipSoft GmbH. Tibia is a registered trademark of CipSoft GmbH.</p>
 	</div>
 </footer>
 <style>
