@@ -1,0 +1,332 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { MINIBIA_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "SoftwareApplication",
+			"name": "Minibia - Tibia Mobile",
+			"operatingSystem": "Android, iOS, Web Browser",
+			"applicationCategory": "GameApplication",
+			"applicationSubCategory": "MMORPG",
+			"description": "Play the classic MMORPG Tibia on your mobile phone. Hunt monsters, level up, and explore the world of Tibia from anywhere.",
+			"url": "https://minibia.com",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			}
+		})} />
+	</head>
+	<body>
+		<Header />
+
+		<!-- Hero Section -->
+		<section class="hero">
+			<div class="hero-inner">
+				<h1>Play <span class="highlight">Tibia</span> on Your Mobile Phone</h1>
+				<p class="hero-subtitle">
+					The classic MMORPG you love, now playable on any device. Hunt monsters, explore dungeons,
+					and level up your character — all from your phone or tablet.
+				</p>
+				<div class="hero-cta">
+					<a href={MINIBIA_URL} class="cta-button" target="_blank" rel="noopener">
+						Play Free on Minibia
+					</a>
+					<a href="/guide" class="cta-secondary">Read the Guide</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- What is Tibia Mobile -->
+		<main>
+			<section class="content-section">
+				<h2>What is Tibia Mobile?</h2>
+				<p>
+					<strong>Tibia</strong> is one of the oldest MMORPGs ever created, first released in 1997 by CipSoft.
+					For decades, players have explored its vast world, battled monsters, and built communities —
+					but only from a desktop computer. <strong>Minibia</strong> changes that by bringing the full
+					Tibia experience to your mobile device.
+				</p>
+				<p>
+					Whether you're on Android, iPhone, or any device with a web browser, you can now dive into the
+					world of Tibia wherever you are. No downloads required — just visit
+					<a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia.com</a> and start playing.
+				</p>
+			</section>
+
+			<!-- Features -->
+			<section class="content-section">
+				<h2>Why Play Tibia on Mobile?</h2>
+				<div class="feature-grid">
+					<div class="card">
+						<h3>Play Anywhere</h3>
+						<p>Hunt during your commute, trade while waiting in line, or explore dungeons from your couch. Tibia goes wherever you go.</p>
+					</div>
+					<div class="card">
+						<h3>No Download Needed</h3>
+						<p>Minibia runs in your mobile browser. No app store, no installation, no storage space. Just open and play.</p>
+					</div>
+					<div class="card">
+						<h3>Classic Tibia Experience</h3>
+						<p>The same monsters, spells, quests, and world you know from Tibia — faithfully recreated for mobile screens with touch controls.</p>
+					</div>
+					<div class="card">
+						<h3>Free to Play</h3>
+						<p>Jump into the game at no cost. Create your character, choose your vocation, and start your adventure immediately.</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- How to Play -->
+			<section class="content-section">
+				<h2>How to Play Tibia on Your Phone</h2>
+				<ol class="steps">
+					<li>
+						<strong>Open your mobile browser</strong> — Chrome, Safari, Firefox, or any modern browser works.
+					</li>
+					<li>
+						<strong>Go to <a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia.com</a></strong> — the mobile-optimized Tibia client.
+					</li>
+					<li>
+						<strong>Create your character</strong> — pick a name and start as a Rookie.
+					</li>
+					<li>
+						<strong>Choose your vocation</strong> — become a Knight, Paladin, Sorcerer, or Druid at level 8.
+					</li>
+					<li>
+						<strong>Explore and hunt</strong> — battle monsters, complete quests, and level up your character.
+					</li>
+				</ol>
+				<div class="cta-box">
+					<p>Ready to start your adventure?</p>
+					<a href={MINIBIA_URL} class="cta-button" target="_blank" rel="noopener">Play Tibia Mobile Now</a>
+				</div>
+			</section>
+
+			<!-- Latest Blog Posts -->
+			{posts.length > 0 && (
+				<section class="content-section">
+					<h2>Latest Guides & News</h2>
+					<div class="post-grid">
+						{posts.map((post) => (
+							<a href={`/blog/${post.id}/`} class="card post-card">
+								<h3>{post.data.title}</h3>
+								<p>{post.data.description}</p>
+							</a>
+						))}
+					</div>
+					<p style="text-align: center; margin-top: 1.5em;">
+						<a href="/blog">View all posts &rarr;</a>
+					</p>
+				</section>
+			)}
+
+			<!-- FAQ for SEO -->
+			<section class="content-section">
+				<h2>Frequently Asked Questions</h2>
+				<div class="faq">
+					<details>
+						<summary>Can you play Tibia on mobile?</summary>
+						<p>Yes! <a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia</a> lets you play Tibia directly in your mobile browser on any Android or iOS device. No app download is required.</p>
+					</details>
+					<details>
+						<summary>Is Tibia Mobile free to play?</summary>
+						<p>Yes, Minibia is completely free to play. You can create a character and start playing right away at no cost.</p>
+					</details>
+					<details>
+						<summary>What is the difference between Tibia and TibiaME?</summary>
+						<p>TibiaME is CipSoft's official mobile game, but it's a different game from the original Tibia. Minibia brings the actual classic Tibia experience — the same world, monsters, and gameplay — to your mobile device.</p>
+					</details>
+					<details>
+						<summary>Do I need to download an app to play Tibia on my phone?</summary>
+						<p>No. Minibia is a web-based client that runs in your mobile browser. Just visit Minibia.com and start playing — no downloads, no app store.</p>
+					</details>
+					<details>
+						<summary>What devices can I play Tibia Mobile on?</summary>
+						<p>Any device with a modern web browser works — Android phones, iPhones, iPads, tablets, and even desktop computers. If you have a browser, you can play.</p>
+					</details>
+				</div>
+			</section>
+		</main>
+
+		<Footer />
+	</body>
+</html>
+
+<style>
+	/* Hero */
+	.hero {
+		background: linear-gradient(180deg, rgba(200, 168, 78, 0.08) 0%, transparent 100%);
+		border-bottom: 1px solid var(--border);
+		padding: 5em 1.5em 4em;
+		text-align: center;
+	}
+	.hero-inner {
+		max-width: 780px;
+		margin: 0 auto;
+	}
+	.hero h1 {
+		font-size: 3em;
+		margin-bottom: 0.5em;
+		line-height: 1.1;
+	}
+	.highlight {
+		color: var(--accent);
+	}
+	.hero-subtitle {
+		font-size: 1.2em;
+		color: var(--text-muted);
+		margin-bottom: 2em;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.hero-cta {
+		display: flex;
+		gap: 1em;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+	.cta-secondary {
+		color: var(--accent);
+		font-weight: 700;
+		padding: 0.75em 2em;
+		border: 2px solid var(--accent);
+		border-radius: 8px;
+		transition: background 0.2s;
+	}
+	.cta-secondary:hover {
+		background: rgba(200, 168, 78, 0.1);
+		text-decoration: none;
+	}
+
+	/* Content sections */
+	.content-section {
+		margin-bottom: 3em;
+	}
+	.content-section h2 {
+		margin-bottom: 1em;
+		color: var(--accent);
+	}
+
+	/* Feature grid */
+	.feature-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+	}
+	.feature-grid h3 {
+		color: var(--text-heading);
+		font-size: 1.1em;
+		margin-bottom: 0.5em;
+	}
+	.feature-grid p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+		margin: 0;
+	}
+
+	/* Steps */
+	.steps {
+		padding-left: 1.5em;
+	}
+	.steps li {
+		margin-bottom: 0.75em;
+		color: var(--text);
+	}
+
+	/* CTA Box */
+	.cta-box {
+		text-align: center;
+		padding: 2em;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		margin-top: 2em;
+	}
+	.cta-box p {
+		font-size: 1.2em;
+		margin-bottom: 1em;
+		color: var(--text-heading);
+	}
+
+	/* Post grid */
+	.post-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1em;
+	}
+	.post-card {
+		display: block;
+		text-decoration: none;
+	}
+	.post-card h3 {
+		font-size: 1em;
+		color: var(--text-heading);
+		margin-bottom: 0.5em;
+	}
+	.post-card p {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	/* FAQ */
+	.faq {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+	details {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1em 1.5em;
+	}
+	details[open] {
+		border-color: var(--accent);
+	}
+	summary {
+		cursor: pointer;
+		font-weight: 700;
+		color: var(--text-heading);
+		list-style: none;
+	}
+	summary::-webkit-details-marker {
+		display: none;
+	}
+	summary::before {
+		content: '+ ';
+		color: var(--accent);
+		font-weight: 700;
+	}
+	details[open] summary::before {
+		content: '- ';
+	}
+	details p {
+		margin-top: 0.75em;
+		color: var(--text-muted);
+	}
+
+	@media (max-width: 720px) {
+		.hero { padding: 3em 1em 2.5em; }
+		.hero h1 { font-size: 2em; }
+		.hero-subtitle { font-size: 1em; }
+		.feature-grid { grid-template-columns: 1fr; }
+		.post-grid { grid-template-columns: 1fr; }
+	}
+</style>

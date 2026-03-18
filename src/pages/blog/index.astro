@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+
+const title = 'Tibia Mobile Blog - Guides, Tips & News';
+const description = 'Guides, tips, hunting spots, and news for playing Tibia on mobile. Everything you need to enjoy the classic MMORPG on your phone.';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Blog</h1>
+			<p class="subtitle">Guides, tips, and news for Tibia mobile players.</p>
+			<section>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`} class="card post-card">
+									<div>
+										<h2 class="title">{post.data.title}</h2>
+										<p class="description">{post.data.description}</p>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</div>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.subtitle {
+		color: var(--text-muted);
+		margin-bottom: 2em;
+	}
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+	.post-card {
+		display: block;
+		text-decoration: none;
+	}
+	.title {
+		font-size: 1.3em;
+		color: var(--text-heading);
+		margin-bottom: 0.25em;
+	}
+	.description {
+		color: var(--text-muted);
+		font-size: 0.95em;
+		margin-bottom: 0.5em;
+	}
+	.date {
+		color: var(--text-muted);
+		font-size: 0.85em;
+		margin: 0;
+	}
+	.post-card:hover .title {
+		color: var(--accent);
+	}
+</style>

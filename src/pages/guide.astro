@@ -1,0 +1,207 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { MINIBIA_URL } from '../consts';
+
+const title = 'Tibia Mobile Beginner Guide - How to Play Tibia on Your Phone';
+const description = 'Complete beginner guide to playing Tibia on mobile. Learn vocations, hunting spots, controls, and tips for getting started with Tibia on your phone via Minibia.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": title,
+			"description": description,
+			"author": { "@type": "Organization", "name": "Tibia Mobile" },
+			"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
+			"mainEntityOfPage": "https://tibiamobile.com/guide"
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<article class="prose">
+				<h1>Tibia Mobile Beginner Guide</h1>
+				<p class="lead">
+					Everything you need to know to start playing Tibia on your mobile phone.
+					This guide covers getting started, choosing a vocation, your first hunts, and tips
+					for playing Tibia effectively on a mobile device.
+				</p>
+
+				<nav class="toc">
+					<h4>Table of Contents</h4>
+					<ol>
+						<li><a href="#getting-started">Getting Started</a></li>
+						<li><a href="#controls">Mobile Controls</a></li>
+						<li><a href="#vocations">Choosing a Vocation</a></li>
+						<li><a href="#first-hunts">Your First Hunts</a></li>
+						<li><a href="#leveling">Leveling Tips</a></li>
+						<li><a href="#mobile-tips">Mobile-Specific Tips</a></li>
+					</ol>
+				</nav>
+
+				<h2 id="getting-started">Getting Started with Tibia Mobile</h2>
+				<p>
+					Playing Tibia on your phone is simple. Visit <a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia.com</a>
+					on your mobile browser and create an account. You'll start on Rookgaard — the beginner island where
+					every Tibia player begins their journey.
+				</p>
+				<p>
+					On Rookgaard, you'll learn the basics: moving your character, attacking monsters, picking up items,
+					and talking to NPCs. Take your time here — once you reach level 8, you can leave for the mainland
+					and choose your vocation.
+				</p>
+
+				<h2 id="controls">Mobile Controls</h2>
+				<p>
+					Minibia is designed with touch controls in mind. Here's how to navigate:
+				</p>
+				<ul>
+					<li><strong>Movement</strong> — Tap where you want to walk, or use the on-screen directional controls.</li>
+					<li><strong>Attacking</strong> — Tap on a monster to target it. Your character will auto-attack once a target is selected.</li>
+					<li><strong>Items</strong> — Tap and hold to interact with items. Drag to move items between containers.</li>
+					<li><strong>NPCs</strong> — Walk up to an NPC and tap to start a conversation. Type keywords to interact.</li>
+					<li><strong>Spells</strong> — Use the spell bar at the bottom of the screen or type spell words in chat.</li>
+				</ul>
+
+				<h2 id="vocations">Choosing a Vocation</h2>
+				<p>
+					At level 8, you choose one of four vocations. This is one of the most important decisions in Tibia,
+					so choose based on your preferred playstyle:
+				</p>
+				<div class="vocation-grid">
+					<div class="card">
+						<h3>Knight</h3>
+						<p><strong>Best for:</strong> Players who like tanking and melee combat.</p>
+						<p>Knights have the highest health pool and use melee weapons and shields. They're the most durable vocation and great for solo hunting. Best choice for beginners on mobile due to simple gameplay.</p>
+					</div>
+					<div class="card">
+						<h3>Paladin</h3>
+						<p><strong>Best for:</strong> Players who like ranged combat and versatility.</p>
+						<p>Paladins use bows, crossbows, and throwing weapons to attack from a distance. They can also use some healing and support spells. A balanced choice that's very profitable to play.</p>
+					</div>
+					<div class="card">
+						<h3>Sorcerer</h3>
+						<p><strong>Best for:</strong> Players who want maximum damage.</p>
+						<p>Sorcerers deal the most damage with powerful elemental spells. They have lower health but can clear groups of monsters quickly with area spells. High risk, high reward.</p>
+					</div>
+					<div class="card">
+						<h3>Druid</h3>
+						<p><strong>Best for:</strong> Players who enjoy healing and team play.</p>
+						<p>Druids are the primary healers in Tibia. They can heal themselves and others, and use nature and ice spells for damage. Essential for team hunts and very welcome in groups.</p>
+					</div>
+				</div>
+
+				<h2 id="first-hunts">Your First Hunts on Mobile</h2>
+				<p>
+					After choosing your vocation and arriving on the mainland, here are good early hunting spots:
+				</p>
+				<ul>
+					<li><strong>Levels 8-15:</strong> Trolls, Rotworms, Skeletons — found near most cities.</li>
+					<li><strong>Levels 15-25:</strong> Minotaurs (Mintwallin), Amazons (Venore), Larvas (Ankrahmun).</li>
+					<li><strong>Levels 25-40:</strong> Cyclopses (Mount Sternum), Dark Monks (Carlin), Giant Spiders (Plains of Havoc).</li>
+					<li><strong>Levels 40-60:</strong> Dragon Lair (Thais), Orc Fortress, Drefia Ghouls.</li>
+				</ul>
+
+				<h2 id="leveling">Leveling Tips for Tibia Mobile</h2>
+				<ul>
+					<li><strong>Always carry supplies</strong> — health potions and mana potions are essential. Buy them before every hunt.</li>
+					<li><strong>Use the right weapon</strong> — upgrade your equipment as you level. Better weapons = faster hunts = more experience.</li>
+					<li><strong>Hunt in your range</strong> — monsters slightly above your level give the best XP ratio.</li>
+					<li><strong>Don't skip Rookgaard</strong> — learning the basics here saves you from costly mistakes on the mainland.</li>
+					<li><strong>Join a guild</strong> — other players can help with quests, share hunting spots, and make the game more fun.</li>
+				</ul>
+
+				<h2 id="mobile-tips">Tips for Playing on Mobile</h2>
+				<ul>
+					<li><strong>Stable connection</strong> — use WiFi when possible to avoid disconnects during dangerous hunts.</li>
+					<li><strong>Brightness up</strong> — Tibia's dungeons are dark. Turn up your screen brightness.</li>
+					<li><strong>Bookmark Minibia</strong> — add Minibia.com to your home screen for instant access.</li>
+					<li><strong>Landscape mode</strong> — rotate your phone for a wider view of the game world.</li>
+					<li><strong>Start as Knight</strong> — melee combat is easier to manage on a touchscreen than kiting as a mage.</li>
+				</ul>
+
+				<div class="cta-box">
+					<p>Ready to put this guide into practice?</p>
+					<a href={MINIBIA_URL} class="cta-button" target="_blank" rel="noopener">Play Tibia Mobile on Minibia</a>
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.lead {
+		font-size: 1.15em;
+		color: var(--text-muted);
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		margin-bottom: 2em;
+	}
+	.toc {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1.25em 1.5em;
+		margin-bottom: 2.5em;
+	}
+	.toc h4 {
+		margin: 0 0 0.5em;
+		color: var(--accent);
+		font-size: 0.9em;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	.toc ol {
+		margin: 0;
+		padding-left: 1.25em;
+	}
+	.toc li {
+		margin-bottom: 0.25em;
+	}
+	.toc a {
+		font-size: 0.95em;
+	}
+	h2 {
+		color: var(--accent);
+		margin-top: 2em;
+		margin-bottom: 0.75em;
+	}
+	.vocation-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+		margin: 1em 0;
+	}
+	.vocation-grid h3 {
+		font-size: 1.1em;
+		margin-bottom: 0.5em;
+	}
+	.vocation-grid p {
+		font-size: 0.9em;
+		color: var(--text-muted);
+		margin-bottom: 0.5em;
+	}
+	.cta-box {
+		text-align: center;
+		padding: 2.5em 2em;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		margin-top: 3em;
+	}
+	.cta-box p {
+		font-size: 1.2em;
+		margin-bottom: 1em;
+		color: var(--text-heading);
+	}
+	@media (max-width: 720px) {
+		.vocation-grid { grid-template-columns: 1fr; }
+	}
+</style>

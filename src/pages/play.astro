@@ -1,0 +1,150 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { MINIBIA_URL } from '../consts';
+
+const title = 'Play Tibia Mobile - Free Browser MMORPG on Your Phone';
+const description = 'Play Tibia on your mobile phone for free. No download required. Open Minibia.com in your browser and start your adventure in the classic MMORPG Tibia.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+
+		<section class="hero-play">
+			<div class="hero-inner">
+				<h1>Play <span class="highlight">Tibia Mobile</span> Right Now</h1>
+				<p>No downloads. No app store. Just open your browser and play the classic MMORPG Tibia on any device.</p>
+				<a href={MINIBIA_URL} class="cta-button cta-large" target="_blank" rel="noopener">
+					Open Minibia &mdash; Play Free
+				</a>
+			</div>
+		</section>
+
+		<main>
+			<section class="content-section">
+				<h2>Tibia on Mobile: How It Works</h2>
+				<p>
+					<a href={MINIBIA_URL} target="_blank" rel="noopener">Minibia</a> is a browser-based Tibia client
+					optimized for mobile screens. It brings the full Tibia experience to your phone with touch-friendly
+					controls, so you can hunt, trade, and explore just like on desktop.
+				</p>
+
+				<div class="compat-grid">
+					<div class="card">
+						<h3>Android</h3>
+						<p>Works on Chrome, Firefox, Samsung Internet, and any modern Android browser. Phones and tablets supported.</p>
+					</div>
+					<div class="card">
+						<h3>iPhone & iPad</h3>
+						<p>Works on Safari and Chrome for iOS. Optimized for both iPhone and iPad screen sizes.</p>
+					</div>
+					<div class="card">
+						<h3>Desktop</h3>
+						<p>Also works on any desktop browser. Play at home on your computer, then continue on your phone.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="content-section">
+				<h2>Why Choose Minibia for Tibia Mobile?</h2>
+				<ul class="benefit-list">
+					<li><strong>Instant play</strong> — no APK downloads, no App Store, no waiting. Click and play.</li>
+					<li><strong>Touch controls</strong> — designed for mobile with tap-to-walk, on-screen buttons, and responsive UI.</li>
+					<li><strong>Classic Tibia world</strong> — the same map, monsters, items, spells, and vocations you know.</li>
+					<li><strong>Active community</strong> — join other players hunting and trading in real-time.</li>
+					<li><strong>Free to play</strong> — create your account and start for free, no credit card needed.</li>
+				</ul>
+			</section>
+
+			<section class="cta-box">
+				<h2>Start Playing Now</h2>
+				<p>Your next hunt is one tap away.</p>
+				<a href={MINIBIA_URL} class="cta-button cta-large" target="_blank" rel="noopener">Play Tibia Mobile on Minibia</a>
+			</section>
+		</main>
+
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.hero-play {
+		background: linear-gradient(180deg, rgba(46, 164, 79, 0.08) 0%, transparent 100%);
+		border-bottom: 1px solid var(--border);
+		padding: 5em 1.5em 4em;
+		text-align: center;
+	}
+	.hero-inner {
+		max-width: 700px;
+		margin: 0 auto;
+	}
+	.hero-play h1 {
+		font-size: 2.8em;
+		margin-bottom: 0.5em;
+	}
+	.highlight { color: var(--accent); }
+	.hero-play p {
+		color: var(--text-muted);
+		font-size: 1.15em;
+		margin-bottom: 2em;
+	}
+	.cta-large {
+		font-size: 1.25em;
+		padding: 1em 2.5em;
+	}
+	.content-section {
+		margin-bottom: 3em;
+	}
+	.content-section h2 {
+		color: var(--accent);
+		margin-bottom: 1em;
+	}
+	.compat-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1em;
+		margin-top: 1.5em;
+	}
+	.compat-grid h3 {
+		font-size: 1.1em;
+		margin-bottom: 0.5em;
+	}
+	.compat-grid p {
+		color: var(--text-muted);
+		font-size: 0.9em;
+		margin: 0;
+	}
+	.benefit-list {
+		padding-left: 1.5em;
+	}
+	.benefit-list li {
+		margin-bottom: 0.75em;
+	}
+	.cta-box {
+		text-align: center;
+		padding: 3em 2em;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+	}
+	.cta-box h2 {
+		color: var(--text-heading);
+		margin-bottom: 0.25em;
+	}
+	.cta-box p {
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	@media (max-width: 720px) {
+		.hero-play { padding: 3em 1em 2.5em; }
+		.hero-play h1 { font-size: 2em; }
+		.compat-grid { grid-template-columns: 1fr; }
+		.cta-large { font-size: 1.1em; padding: 0.85em 2em; }
+	}
+</style>
