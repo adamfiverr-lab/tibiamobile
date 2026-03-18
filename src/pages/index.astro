@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import MinibiaBanner from '../components/MinibiaBanner.astro';
 import monsters from '../data/monsters.json';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
@@ -67,6 +68,8 @@ const popularMonsters = monsters.filter(m =>
 					<p>How to play Tibia in your phone's browser</p>
 				</a>
 			</section>
+
+			<MinibiaBanner />
 
 			<!-- Popular Monsters - shows this is a real wiki -->
 			<section class="content-section">
