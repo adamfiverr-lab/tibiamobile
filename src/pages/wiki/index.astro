@@ -1,0 +1,112 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import monsters from '../../data/monsters.json';
+
+const monsterCount = monsters.length;
+const title = 'Tibia Wiki - Spells, Vocations & Game Info';
+const description = 'Comprehensive Tibia wiki with spell lists, vocation details, and game information. Quick reference for Tibia mobile players.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "CollectionPage",
+			"name": title,
+			"description": description,
+			"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
+			"mainEntityOfPage": "https://tibiamobile.com/wiki"
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Tibia Wiki</h1>
+			<p class="lead">
+				Quick reference guides for Tibia spells, vocations, and game mechanics.
+				Everything you need to look up during a hunt or while planning your character build.
+			</p>
+
+			<div class="wiki-grid">
+				<a href="/wiki/spells" class="wiki-card card">
+					<div class="wiki-card-icon">&#9889;</div>
+					<h2>Spell List</h2>
+					<p>Complete list of all Tibia spells organized by vocation. Mana costs, level requirements, and spell words for every attack, healing, and support spell.</p>
+					<span class="wiki-card-link">View all spells &rarr;</span>
+				</a>
+
+				<a href="/wiki/vocations" class="wiki-card card">
+					<div class="wiki-card-icon">&#9876;</div>
+					<h2>Vocations Guide</h2>
+					<p>Detailed breakdown of Knight, Paladin, Sorcerer, and Druid. HP/Mana gain per level, playstyle, strengths, weaknesses, and key spells for each vocation.</p>
+					<span class="wiki-card-link">View vocations &rarr;</span>
+				</a>
+
+				<a href="/wiki/monsters" class="wiki-card card">
+					<div class="wiki-card-icon">&#128050;</div>
+					<h2>Monster Database</h2>
+					<p>Complete database of {monsterCount} Tibia creatures. Stats, loot tables, elemental weaknesses, locations, and difficulty ratings for every monster.</p>
+					<span class="wiki-card-link">Browse all monsters &rarr;</span>
+				</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.lead {
+		font-size: 1.15em;
+		color: var(--text-muted);
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		margin-bottom: 2.5em;
+	}
+	.wiki-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5em;
+	}
+	.wiki-card {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		padding: 2em;
+	}
+	.wiki-card:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+	.wiki-card-icon {
+		font-size: 2em;
+		margin-bottom: 0.5em;
+	}
+	.wiki-card h2 {
+		font-size: 1.4em;
+		color: var(--text-heading);
+		margin-bottom: 0.5em;
+	}
+	.wiki-card p {
+		font-size: 0.95em;
+		color: var(--text-muted);
+		margin-bottom: 1em;
+		line-height: 1.6;
+	}
+	.wiki-card-link {
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 0.9em;
+	}
+	.wiki-card:hover .wiki-card-link {
+		color: var(--accent-light);
+	}
+	@media (max-width: 720px) {
+		.wiki-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

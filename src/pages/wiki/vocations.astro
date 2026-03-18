@@ -1,0 +1,464 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+
+const title = 'Tibia Vocations Guide - Knight, Paladin, Sorcerer, Druid';
+const description = 'Detailed guide to all four Tibia vocations. Stats, playstyle, strengths, weaknesses, and recommended equipment for each vocation.';
+
+interface Vocation {
+	name: string;
+	slug: string;
+	hpPerLevel: number;
+	manaPerLevel: number;
+	capPerLevel: number;
+	playstyle: string;
+	description: string;
+	strengths: string[];
+	weaknesses: string[];
+	keySpells: string[];
+	equipment: string;
+}
+
+const vocations: Vocation[] = [
+	{
+		name: "Knight",
+		slug: "knight",
+		hpPerLevel: 15,
+		manaPerLevel: 5,
+		capPerLevel: 25,
+		playstyle: "Melee Tank",
+		description: "Knights are the frontline warriors of Tibia. With the highest HP gain per level and access to powerful melee weapons, they excel at tanking damage and dealing devastating close-range attacks. Knights rely on their durability to survive fights that would kill other vocations, making them ideal for solo hunting and as the tank in team hunts.",
+		strengths: [
+			"Highest HP pool of any vocation — can absorb massive damage",
+			"Strong melee damage with swords, axes, and clubs",
+			"Best shielding skill — blocks more damage with shields",
+			"Highest capacity — can carry more loot and supplies",
+			"Simple gameplay loop ideal for mobile play",
+		],
+		weaknesses: [
+			"Lowest mana pool — limited spell usage",
+			"No ranged attacks — must be adjacent to target",
+			"Slow mana regeneration makes spell-dependent builds difficult",
+			"Vulnerable to monsters that keep distance",
+			"Less effective in PvP against kiting mages",
+		],
+		keySpells: [
+			"Exori (Berserk) — area melee attack, bread and butter at level 35+",
+			"Exori Mas (Groundshaker) — larger area attack for groups",
+			"Exori Gran (Fierce Berserk) — massive single-target damage at level 90+",
+			"Exori Min (Whirlwind Throw) — ranged physical attack",
+			"Exura (Light Healing) — basic healing for sustain",
+		],
+		equipment: "Knights use swords, axes, or clubs as their primary weapon, paired with a shield for defense. Heavy armor (plate armor, knight armor, magic plate armor) and full helmets or warrior helmets provide the best protection. At higher levels, two-handed weapons become viable when raw damage output is more important than defense.",
+	},
+	{
+		name: "Paladin",
+		slug: "paladin",
+		hpPerLevel: 10,
+		manaPerLevel: 15,
+		capPerLevel: 20,
+		playstyle: "Ranged DPS / Hybrid",
+		description: "Paladins are versatile ranged fighters who use bows, crossbows, and holy spells to defeat enemies from a safe distance. With balanced HP and mana gains, they can both deal consistent damage and sustain themselves with healing spells. Paladins are often considered the most profitable vocation because their distance fighting style conserves supplies.",
+		strengths: [
+			"Ranged attacks keep you safely away from monsters",
+			"Balanced HP and mana pool — good survivability with decent magic",
+			"Most profitable vocation — low supply cost relative to loot",
+			"Holy damage effective against undead creatures",
+			"Good capacity for carrying loot during hunts",
+		],
+		weaknesses: [
+			"Ammunition adds ongoing supply cost",
+			"Lower raw damage compared to Sorcerers",
+			"Less healing power than Druids",
+			"Requires careful positioning and kiting on mobile",
+			"Area attacks only available at higher levels",
+		],
+		keySpells: [
+			"Exori San (Divine Caldera) — holy area attack at level 50+",
+			"Exevo Mas San (Divine Missile) — holy missile at level 40+",
+			"Exura (Light Healing) — efficient low-cost healing",
+			"Exura Gran (Intense Healing) — stronger healing option",
+			"Utani Hur (Haste) — essential for kiting monsters",
+		],
+		equipment: "Paladins equip bows or crossbows as their primary weapon, using arrows or bolts as ammunition. Royal helmets, paladin armor, and boots of haste are ideal gear choices. At lower levels, spears serve as a cost-effective thrown weapon. Paladins should always carry plenty of ammunition and a melee weapon as backup for close encounters.",
+	},
+	{
+		name: "Sorcerer",
+		slug: "sorcerer",
+		hpPerLevel: 5,
+		manaPerLevel: 30,
+		capPerLevel: 10,
+		playstyle: "Magic DPS",
+		description: "Sorcerers are the supreme damage dealers of Tibia. With the largest mana pool and access to devastating area-of-effect spells, they can clear entire rooms of monsters in seconds. Their elemental mastery covers energy and fire damage, giving them tools for almost any situation. The tradeoff is fragility — with only 5 HP per level, positioning and spell timing are critical.",
+		strengths: [
+			"Highest damage output in the game with area spells",
+			"Massive mana pool allows sustained spell casting",
+			"Energy and fire spells cover most monster weaknesses",
+			"Excellent for power leveling — fast experience per hour",
+			"Strong in PvP with burst damage and magic shield",
+		],
+		weaknesses: [
+			"Lowest HP pool — very fragile, dies quickly if caught",
+			"Expensive to play — high mana potion consumption",
+			"Lowest capacity — can carry fewer supplies and loot",
+			"Requires precise positioning, which is harder on mobile",
+			"No healing others — cannot support teammates",
+		],
+		keySpells: [
+			"Exevo Gran Mas Flam (Hell's Core) — massive fire area at level 60+",
+			"Exevo Gran Mas Vis (Rage of the Skies) — energy area at level 55+",
+			"Exori Vis (Energy Strike) — cheap instant energy damage",
+			"Exori Flam (Flame Strike) — cheap instant fire damage",
+			"Utamo Vita (Magic Shield) — redirects damage to mana, essential survival tool",
+		],
+		equipment: "Sorcerers use wands as their primary weapon, which deal elemental damage automatically at range. Magic robes, blue robes, and spellbook provide magic level bonuses. Hat of the Mad and boots of haste round out the gear. Since Sorcerers have low capacity, inventory management is important — bring mana potions and leave room for valuable loot.",
+	},
+	{
+		name: "Druid",
+		slug: "druid",
+		hpPerLevel: 5,
+		manaPerLevel: 30,
+		capPerLevel: 10,
+		playstyle: "Healer / Magic DPS",
+		description: "Druids are Tibia's healers and nature mages. They share the Sorcerer's massive mana pool but trade raw damage for the ability to heal other players — making them indispensable in team hunts. Their ice and earth spells provide strong area damage, and their healing abilities mean they rarely die when played carefully. Druids are the most sought-after party member in Tibia.",
+		strengths: [
+			"Only vocation that can heal other players with Mass Healing",
+			"Same large mana pool as Sorcerers — plenty of spell power",
+			"Ice and earth spells are effective against many creatures",
+			"Excellent survivability with self-healing",
+			"Always welcome in team hunts — high demand vocation",
+		],
+		weaknesses: [
+			"Lowest HP pool — as fragile as Sorcerers",
+			"Lower damage output compared to Sorcerers",
+			"Lowest capacity — inventory management matters",
+			"Team healing on mobile requires quick targeting",
+			"Expensive mana potion usage during extended hunts",
+		],
+		keySpells: [
+			"Exura Gran Mas Res (Mass Healing) — heals all nearby party members at level 36+",
+			"Exevo Gran Mas Frigo (Eternal Winter) — devastating ice area at level 60+",
+			"Exevo Gran Mas Tera (Wrath of Nature) — earth area at level 55+",
+			"Exori Frigo (Ice Strike) — cheap instant ice damage",
+			"Exori Tera (Terra Strike) — cheap instant earth damage",
+		],
+		equipment: "Druids use rods as their primary weapon, which deal elemental damage at range similar to wands. Gear is nearly identical to Sorcerers: magic robes, blue robes, and spellbooks for magic level. The key difference is that Druids should carry both mana potions for sustained healing and some health potions as emergency backup. Rods of choice depend on the target's elemental weakness.",
+	},
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": title,
+			"description": description,
+			"author": { "@type": "Organization", "name": "Tibia Mobile" },
+			"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
+			"mainEntityOfPage": "https://tibiamobile.com/wiki/vocations"
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb">
+				<a href="/wiki">Wiki</a> <span>/</span> <span>Vocations</span>
+			</nav>
+
+			<h1>Tibia Vocations Guide</h1>
+			<p class="lead">
+				Detailed breakdown of all four Tibia vocations.
+				Choose the right vocation for your playstyle with this reference covering stats, strengths, weaknesses, and key spells.
+			</p>
+
+			<div class="stat-comparison">
+				<h2>Stat Comparison per Level</h2>
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr>
+								<th>Vocation</th>
+								<th>HP / Level</th>
+								<th>Mana / Level</th>
+								<th>Cap / Level</th>
+								<th>Playstyle</th>
+							</tr>
+						</thead>
+						<tbody>
+							{vocations.map((voc) => (
+								<tr>
+									<td><strong class={`voc-name voc-${voc.slug}`}>{voc.name}</strong></td>
+									<td>{voc.hpPerLevel}</td>
+									<td>{voc.manaPerLevel}</td>
+									<td>{voc.capPerLevel}</td>
+									<td>{voc.playstyle}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			{vocations.map((voc) => (
+				<section class="vocation-detail" id={voc.slug}>
+					<div class={`vocation-header voc-header-${voc.slug}`}>
+						<h2>{voc.name}</h2>
+						<span class="voc-type">{voc.playstyle}</span>
+					</div>
+
+					<p class="voc-desc">{voc.description}</p>
+
+					<div class="stat-pills">
+						<span class="stat-pill"><strong>{voc.hpPerLevel}</strong> HP/lvl</span>
+						<span class="stat-pill"><strong>{voc.manaPerLevel}</strong> Mana/lvl</span>
+						<span class="stat-pill"><strong>{voc.capPerLevel}</strong> Cap/lvl</span>
+					</div>
+
+					<div class="voc-columns">
+						<div class="voc-col">
+							<h3>Strengths</h3>
+							<ul class="pro-list">
+								{voc.strengths.map((s) => <li>{s}</li>)}
+							</ul>
+						</div>
+						<div class="voc-col">
+							<h3>Weaknesses</h3>
+							<ul class="con-list">
+								{voc.weaknesses.map((w) => <li>{w}</li>)}
+							</ul>
+						</div>
+					</div>
+
+					<div class="voc-spells">
+						<h3>Key Spells</h3>
+						<ul>
+							{voc.keySpells.map((spell) => <li><code>{spell.split(" — ")[0]}</code> — {spell.split(" — ")[1]}</li>)}
+						</ul>
+					</div>
+
+					<div class="voc-equipment">
+						<h3>Equipment</h3>
+						<p>{voc.equipment}</p>
+					</div>
+				</section>
+			))}
+
+			<section class="choosing-section">
+				<h2>How to Choose Your Vocation</h2>
+				<p>Your vocation choice depends on your preferred playstyle and how you plan to play Tibia. Here are some guidelines:</p>
+				<ul>
+					<li><strong>New to Tibia or playing primarily on mobile?</strong> Start with a <a href="#knight">Knight</a>. The simple melee gameplay translates well to touchscreen controls, and high HP gives you room to make mistakes.</li>
+					<li><strong>Want to make gold efficiently?</strong> <a href="#paladin">Paladin</a> is the most profitable vocation. Low supply costs and ranged attacks mean more loot value per hunt.</li>
+					<li><strong>Want to level as fast as possible?</strong> <a href="#sorcerer">Sorcerer</a> has the highest damage output and clears spawns fastest with area spells.</li>
+					<li><strong>Want to be valued in groups?</strong> <a href="#druid">Druid</a> is always in demand for team hunts. Being able to heal the party makes you essential.</li>
+				</ul>
+				<p>Remember: you choose your vocation at level 8 when leaving Rookgaard. This decision is permanent, so take your time and consider what sounds most fun to you.</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb span {
+		margin: 0 0.3em;
+	}
+	.lead {
+		font-size: 1.1em;
+		color: var(--text-muted);
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		margin-bottom: 2.5em;
+	}
+
+	/* Stat comparison table */
+	.stat-comparison {
+		margin-bottom: 3em;
+	}
+	.stat-comparison h2 {
+		color: var(--accent);
+		font-size: 1.4em;
+		margin-bottom: 0.75em;
+	}
+	.table-wrap {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	table {
+		font-size: 0.95em;
+	}
+	.voc-name {
+		font-weight: 700;
+	}
+	.voc-knight { color: #e8a0a0; }
+	.voc-paladin { color: #a0e0a0; }
+	.voc-sorcerer { color: #a0b0e8; }
+	.voc-druid { color: #a0dce8; }
+
+	/* Vocation detail sections */
+	.vocation-detail {
+		margin-bottom: 3em;
+		padding-top: 1em;
+	}
+	.vocation-header {
+		display: flex;
+		align-items: baseline;
+		gap: 1em;
+		margin-bottom: 0.75em;
+		padding-bottom: 0.5em;
+		border-bottom: 2px solid var(--border);
+	}
+	.vocation-header h2 {
+		font-size: 1.6em;
+		margin: 0;
+	}
+	.voc-header-knight h2 { color: #e8a0a0; }
+	.voc-header-paladin h2 { color: #a0e0a0; }
+	.voc-header-sorcerer h2 { color: #a0b0e8; }
+	.voc-header-druid h2 { color: #a0dce8; }
+	.voc-type {
+		font-size: 0.9em;
+		color: var(--text-muted);
+		font-style: italic;
+	}
+	.voc-desc {
+		color: var(--text);
+		line-height: 1.7;
+		margin-bottom: 1em;
+	}
+
+	/* Stat pills */
+	.stat-pills {
+		display: flex;
+		gap: 0.75em;
+		margin-bottom: 1.5em;
+		flex-wrap: wrap;
+	}
+	.stat-pill {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 0.35em 0.9em;
+		font-size: 0.85em;
+		color: var(--text-muted);
+	}
+	.stat-pill strong {
+		color: var(--accent-light);
+		margin-right: 0.2em;
+	}
+
+	/* Strengths / Weaknesses columns */
+	.voc-columns {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5em;
+		margin-bottom: 1.5em;
+	}
+	.voc-col h3 {
+		font-size: 1.05em;
+		margin-bottom: 0.5em;
+		color: var(--text-heading);
+	}
+	.pro-list, .con-list {
+		padding-left: 1.25em;
+		margin: 0;
+	}
+	.pro-list li, .con-list li {
+		margin-bottom: 0.35em;
+		font-size: 0.9em;
+		color: var(--text-muted);
+		line-height: 1.5;
+	}
+	.pro-list li::marker { content: "+ "; color: #6ecf6e; }
+	.con-list li::marker { content: "- "; color: #cf6e6e; }
+
+	/* Key spells */
+	.voc-spells {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1.25em 1.5em;
+		margin-bottom: 1em;
+	}
+	.voc-spells h3 {
+		font-size: 1em;
+		color: var(--accent);
+		margin-bottom: 0.5em;
+	}
+	.voc-spells ul {
+		padding-left: 1.25em;
+		margin: 0;
+	}
+	.voc-spells li {
+		margin-bottom: 0.3em;
+		font-size: 0.9em;
+	}
+	.voc-spells code {
+		font-size: 0.9em;
+	}
+
+	/* Equipment */
+	.voc-equipment h3 {
+		font-size: 1em;
+		color: var(--text-heading);
+		margin-bottom: 0.4em;
+	}
+	.voc-equipment p {
+		font-size: 0.9em;
+		color: var(--text-muted);
+		line-height: 1.6;
+	}
+
+	/* Choosing section */
+	.choosing-section {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 2em;
+		margin-top: 1em;
+	}
+	.choosing-section h2 {
+		color: var(--accent);
+		font-size: 1.3em;
+		margin-bottom: 0.75em;
+	}
+	.choosing-section ul {
+		padding-left: 1.25em;
+	}
+	.choosing-section li {
+		margin-bottom: 0.6em;
+		font-size: 0.95em;
+		line-height: 1.5;
+	}
+	.choosing-section p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+	}
+
+	@media (max-width: 720px) {
+		.voc-columns {
+			grid-template-columns: 1fr;
+			gap: 1em;
+		}
+		.vocation-header {
+			flex-direction: column;
+			gap: 0.25em;
+		}
+		th, td {
+			padding: 0.5em 0.5em;
+			font-size: 0.85em;
+		}
+	}
+</style>

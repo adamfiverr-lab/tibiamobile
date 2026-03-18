@@ -1,0 +1,320 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+
+const title = 'Tibia Spell List - All Spells by Vocation';
+const description = 'Complete list of all Tibia spells organized by vocation. Includes mana cost, level requirement, and spell words for Knights, Paladins, Sorcerers, and Druids.';
+
+interface Spell {
+	words: string;
+	name: string;
+	vocation: string;
+	level: number;
+	mana: number;
+	category: string;
+}
+
+const spells: Spell[] = [
+	// Attack spells
+	{ words: "exori", name: "Berserk", vocation: "Knight", level: 35, mana: 115, category: "Attack" },
+	{ words: "exori gran", name: "Fierce Berserk", vocation: "Knight", level: 90, mana: 340, category: "Attack" },
+	{ words: "exori mas", name: "Groundshaker", vocation: "Knight", level: 33, mana: 160, category: "Attack" },
+	{ words: "exori min", name: "Whirlwind Throw", vocation: "Knight", level: 28, mana: 200, category: "Attack" },
+	{ words: "exevo gran mas flam", name: "Hell's Core", vocation: "Sorcerer", level: 60, mana: 1100, category: "Attack" },
+	{ words: "exevo gran mas vis", name: "Rage of the Skies", vocation: "Sorcerer", level: 55, mana: 600, category: "Attack" },
+	{ words: "exevo gran mas tera", name: "Wrath of Nature", vocation: "Druid", level: 55, mana: 700, category: "Attack" },
+	{ words: "exevo gran mas frigo", name: "Eternal Winter", vocation: "Druid", level: 60, mana: 1050, category: "Attack" },
+	{ words: "exori vis", name: "Energy Strike", vocation: "Sorcerer", level: 12, mana: 20, category: "Attack" },
+	{ words: "exori flam", name: "Flame Strike", vocation: "Sorcerer", level: 14, mana: 20, category: "Attack" },
+	{ words: "exori tera", name: "Terra Strike", vocation: "Druid", level: 13, mana: 20, category: "Attack" },
+	{ words: "exori frigo", name: "Ice Strike", vocation: "Druid", level: 15, mana: 20, category: "Attack" },
+	{ words: "exevo vis lux", name: "Great Energy Beam", vocation: "Sorcerer", level: 29, mana: 110, category: "Attack" },
+	{ words: "exevo gran vis lux", name: "Ultimate Energy Strike", vocation: "Sorcerer", level: 100, mana: 100, category: "Attack" },
+	{ words: "exori san", name: "Divine Caldera", vocation: "Paladin", level: 50, mana: 160, category: "Attack" },
+	{ words: "exevo mas san", name: "Divine Missile", vocation: "Paladin", level: 40, mana: 120, category: "Attack" },
+
+	// Healing spells
+	{ words: "exura", name: "Light Healing", vocation: "All", level: 9, mana: 20, category: "Healing" },
+	{ words: "exura gran", name: "Intense Healing", vocation: "All", level: 11, mana: 70, category: "Healing" },
+	{ words: "exura vita", name: "Ultimate Healing", vocation: "Druid/Sorcerer", level: 30, mana: 160, category: "Healing" },
+	{ words: "exura gran mas res", name: "Mass Healing", vocation: "Druid", level: 36, mana: 150, category: "Healing" },
+	{ words: "exana pox", name: "Cure Poison", vocation: "All", level: 10, mana: 30, category: "Healing" },
+
+	// Support spells
+	{ words: "utani hur", name: "Haste", vocation: "All", level: 14, mana: 60, category: "Support" },
+	{ words: "utani gran hur", name: "Strong Haste", vocation: "Druid/Sorcerer", level: 20, mana: 100, category: "Support" },
+	{ words: "utamo vita", name: "Magic Shield", vocation: "Druid/Sorcerer", level: 14, mana: 50, category: "Support" },
+	{ words: "utevo lux", name: "Light", vocation: "All", level: 8, mana: 20, category: "Support" },
+	{ words: "utevo gran lux", name: "Great Light", vocation: "All", level: 13, mana: 60, category: "Support" },
+	{ words: "exiva", name: "Find Person", vocation: "All", level: 8, mana: 20, category: "Support" },
+	{ words: "exani tera", name: "Levitate", vocation: "All", level: 12, mana: 50, category: "Support" },
+];
+
+const vocations = ["All", "Knight", "Paladin", "Sorcerer", "Druid"];
+const categories = ["Attack", "Healing", "Support"];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"headline": title,
+			"description": description,
+			"author": { "@type": "Organization", "name": "Tibia Mobile" },
+			"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
+			"mainEntityOfPage": "https://tibiamobile.com/wiki/spells"
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main class="spell-page">
+			<nav class="breadcrumb">
+				<a href="/wiki">Wiki</a> <span>/</span> <span>Spells</span>
+			</nav>
+
+			<h1>Tibia Spell List</h1>
+			<p class="lead">
+				Complete list of Tibia 7.6 spells organized by vocation.
+				Use the tabs below to filter by vocation, or browse by spell category.
+			</p>
+
+			<div class="filter-tabs" role="tablist" aria-label="Filter spells by vocation">
+				<button class="filter-tab active" role="tab" aria-selected="true" data-vocation="all">All Vocations</button>
+				<button class="filter-tab" role="tab" aria-selected="false" data-vocation="Knight">Knight</button>
+				<button class="filter-tab" role="tab" aria-selected="false" data-vocation="Paladin">Paladin</button>
+				<button class="filter-tab" role="tab" aria-selected="false" data-vocation="Sorcerer">Sorcerer</button>
+				<button class="filter-tab" role="tab" aria-selected="false" data-vocation="Druid">Druid</button>
+			</div>
+
+			{categories.map((category) => (
+				<section class="spell-section" data-category={category}>
+					<h2>{category} Spells</h2>
+					<div class="table-wrap">
+						<table>
+							<thead>
+								<tr>
+									<th>Spell Words</th>
+									<th>Name</th>
+									<th>Vocation</th>
+									<th>Level</th>
+									<th>Mana</th>
+								</tr>
+							</thead>
+							<tbody>
+								{spells
+									.filter((s) => s.category === category)
+									.sort((a, b) => a.level - b.level)
+									.map((spell) => (
+										<tr data-vocation={spell.vocation}>
+											<td><code>{spell.words}</code></td>
+											<td>{spell.name}</td>
+											<td><span class={`voc-badge voc-${spell.vocation.toLowerCase().replace("/", "-")}`}>{spell.vocation}</span></td>
+											<td>{spell.level}+</td>
+											<td>{spell.mana}</td>
+										</tr>
+									))}
+							</tbody>
+						</table>
+					</div>
+				</section>
+			))}
+
+			<section class="spell-notes">
+				<h2>Spell Words Reference</h2>
+				<p>Tibia spell words follow a consistent Latin-inspired naming convention. Understanding the prefixes helps you remember spells:</p>
+				<ul>
+					<li><strong>exori</strong> — instant attack spells (strikes, area attacks)</li>
+					<li><strong>exevo</strong> — directed attack spells (beams, waves, area effects)</li>
+					<li><strong>exura</strong> — healing spells</li>
+					<li><strong>exana</strong> — cure spells (poison, paralysis)</li>
+					<li><strong>utani</strong> — speed/movement spells</li>
+					<li><strong>utamo</strong> — defensive spells (magic shield)</li>
+					<li><strong>utevo</strong> — creation spells (light, food)</li>
+					<li><strong>exiva</strong> — finding/tracking spells</li>
+					<li><strong>exani</strong> — movement spells (levitate)</li>
+				</ul>
+				<p>Modifiers like <strong>gran</strong> (great), <strong>mas</strong> (mass), and <strong>vita</strong> (ultimate) indicate stronger versions of base spells. Element suffixes include <strong>vis</strong> (energy), <strong>flam</strong> (fire), <strong>frigo</strong> (ice), and <strong>tera</strong> (earth).</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const tabs = document.querySelectorAll<HTMLButtonElement>(".filter-tab");
+		const rows = document.querySelectorAll<HTMLTableRowElement>("tbody tr[data-vocation]");
+
+		tabs.forEach((tab) => {
+			tab.addEventListener("click", () => {
+				tabs.forEach((t) => {
+					t.classList.remove("active");
+					t.setAttribute("aria-selected", "false");
+				});
+				tab.classList.add("active");
+				tab.setAttribute("aria-selected", "true");
+
+				const vocation = tab.dataset.vocation;
+
+				rows.forEach((row) => {
+					if (vocation === "all") {
+						row.style.display = "";
+					} else {
+						const rowVoc = row.dataset.vocation || "";
+						const match =
+							rowVoc === vocation ||
+							rowVoc === "All" ||
+							rowVoc.includes(vocation!);
+						row.style.display = match ? "" : "none";
+					}
+				});
+			});
+		});
+	});
+</script>
+
+<style>
+	.spell-page {
+		width: 900px;
+		max-width: calc(100% - 2em);
+	}
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb span {
+		margin: 0 0.3em;
+	}
+	.lead {
+		font-size: 1.1em;
+		color: var(--text-muted);
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		margin-bottom: 2em;
+	}
+	.filter-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		margin-bottom: 2em;
+	}
+	.filter-tab {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		color: var(--text-muted);
+		padding: 0.5em 1.2em;
+		border-radius: 6px;
+		cursor: pointer;
+		font-family: inherit;
+		font-size: 0.9em;
+		transition: all 0.2s;
+	}
+	.filter-tab:hover {
+		border-color: var(--accent);
+		color: var(--text-heading);
+	}
+	.filter-tab.active {
+		background: var(--accent);
+		color: var(--bg-dark);
+		border-color: var(--accent);
+		font-weight: 700;
+	}
+	.spell-section {
+		margin-bottom: 2.5em;
+	}
+	.spell-section h2 {
+		color: var(--accent);
+		font-size: 1.4em;
+		margin-bottom: 0.75em;
+	}
+	.table-wrap {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.95em;
+	}
+	th {
+		background: var(--bg-card);
+		color: var(--accent);
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		padding: 0.6em 0.75em;
+		white-space: nowrap;
+	}
+	td {
+		padding: 0.6em 0.75em;
+		border-color: var(--border);
+	}
+	td code {
+		font-size: 0.9em;
+		white-space: nowrap;
+	}
+	tbody tr:hover {
+		background: var(--bg-card-hover);
+	}
+	.voc-badge {
+		display: inline-block;
+		font-size: 0.8em;
+		padding: 0.15em 0.6em;
+		border-radius: 4px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	.voc-knight { background: rgba(200, 80, 80, 0.2); color: #e8a0a0; }
+	.voc-paladin { background: rgba(80, 180, 80, 0.2); color: #a0e0a0; }
+	.voc-sorcerer { background: rgba(100, 120, 220, 0.2); color: #a0b0e8; }
+	.voc-druid { background: rgba(80, 180, 200, 0.2); color: #a0dce8; }
+	.voc-all { background: rgba(200, 168, 78, 0.2); color: var(--accent-light); }
+	.voc-druid-sorcerer { background: rgba(140, 100, 220, 0.2); color: #c0a0e8; }
+	.spell-notes {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 2em;
+		margin-top: 1em;
+	}
+	.spell-notes h2 {
+		color: var(--accent);
+		font-size: 1.3em;
+		margin-bottom: 0.75em;
+	}
+	.spell-notes ul {
+		padding-left: 1.25em;
+	}
+	.spell-notes li {
+		margin-bottom: 0.4em;
+		font-size: 0.95em;
+	}
+	.spell-notes p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+	}
+	@media (max-width: 720px) {
+		.spell-page {
+			width: 100%;
+		}
+		.filter-tabs {
+			gap: 0.35em;
+		}
+		.filter-tab {
+			padding: 0.4em 0.8em;
+			font-size: 0.8em;
+		}
+		th, td {
+			padding: 0.5em 0.5em;
+			font-size: 0.85em;
+		}
+	}
+</style>

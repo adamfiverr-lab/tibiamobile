@@ -1,0 +1,484 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import monsters from '../../../data/monsters.json';
+
+export function getStaticPaths() {
+	return monsters.map((monster) => ({
+		params: { slug: monster.slug },
+		props: { monster },
+	}));
+}
+
+interface Monster {
+	slug: string;
+	name: string;
+	hp: number;
+	exp: number;
+	maxDamage: number;
+	armor: number;
+	speed: number;
+	elements: Record<string, number>;
+	loot: string[];
+	location: string;
+	difficulty: string;
+	category: string;
+	description: string;
+}
+
+const { monster } = Astro.props as { monster: Monster };
+
+const title = `${monster.name} - Tibia Monster Stats, Loot & Location`;
+const description = `Complete guide to ${monster.name} in Tibia. HP, experience, loot drops, location, and weaknesses.`;
+
+// Find related monsters in the same category (excluding self)
+const related = monsters
+	.filter((m) => m.category === monster.category && m.slug !== monster.slug)
+	.slice(0, 4);
+
+// If less than 3 related in same category, fill from nearby exp range
+const relatedSlugs = new Set(related.map((m) => m.slug));
+if (related.length < 3) {
+	const nearby = monsters
+		.filter((m) => m.slug !== monster.slug && !relatedSlugs.has(m.slug))
+		.sort((a, b) => Math.abs(a.exp - monster.exp) - Math.abs(b.exp - monster.exp))
+		.slice(0, 3 - related.length);
+	related.push(...nearby);
+}
+
+const elementNames: Record<string, string> = {
+	physical: "Physical",
+	fire: "Fire",
+	ice: "Ice",
+	earth: "Earth",
+	energy: "Energy",
+	holy: "Holy",
+	death: "Death",
+};
+
+function elementClass(value: number): string {
+	if (value === 0) return "immune";
+	if (value < 80) return "strong-resist";
+	if (value < 100) return "resist";
+	if (value === 100) return "neutral";
+	return "weak";
+}
+
+function elementLabel(value: number): string {
+	if (value === 0) return "Immune";
+	return `${value}%`;
+}
+
+// JSON-LD structured data
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Article",
+	"headline": title,
+	"description": description,
+	"author": { "@type": "Organization", "name": "Tibia Mobile" },
+	"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
+	"mainEntityOfPage": `https://tibiamobile.com/wiki/monsters/${monster.slug}`,
+	"about": {
+		"@type": "Thing",
+		"name": monster.name,
+		"description": monster.description,
+		"additionalProperty": [
+			{ "@type": "PropertyValue", "name": "Hit Points", "value": monster.hp },
+			{ "@type": "PropertyValue", "name": "Experience", "value": monster.exp },
+			{ "@type": "PropertyValue", "name": "Max Damage", "value": monster.maxDamage },
+			{ "@type": "PropertyValue", "name": "Armor", "value": monster.armor },
+			{ "@type": "PropertyValue", "name": "Speed", "value": monster.speed },
+			{ "@type": "PropertyValue", "name": "Difficulty", "value": monster.difficulty },
+			{ "@type": "PropertyValue", "name": "Category", "value": monster.category },
+		],
+	},
+};
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+	</head>
+	<body>
+		<Header />
+		<main class="monster-page">
+			<nav class="breadcrumb">
+				<a href="/wiki">Wiki</a> <span>/</span> <a href="/wiki/monsters">Monsters</a> <span>/</span> <span>{monster.name}</span>
+			</nav>
+
+			<h1>{monster.name}</h1>
+
+			<div class="monster-meta">
+				<span class={`diff-badge diff-${monster.difficulty.toLowerCase()}`}>{monster.difficulty}</span>
+				<span class="category-badge">{monster.category}</span>
+			</div>
+
+			<p class="monster-description">{monster.description}</p>
+
+			<section class="stats-section">
+				<h2>Stats</h2>
+				<div class="stats-grid">
+					<div class="stat-card">
+						<span class="stat-label">Hit Points</span>
+						<span class="stat-value">{monster.hp.toLocaleString()}</span>
+					</div>
+					<div class="stat-card">
+						<span class="stat-label">Experience</span>
+						<span class="stat-value">{monster.exp.toLocaleString()}</span>
+					</div>
+					<div class="stat-card">
+						<span class="stat-label">Max Damage</span>
+						<span class="stat-value">{monster.maxDamage.toLocaleString()}</span>
+					</div>
+					<div class="stat-card">
+						<span class="stat-label">Armor</span>
+						<span class="stat-value">{monster.armor}</span>
+					</div>
+					<div class="stat-card">
+						<span class="stat-label">Speed</span>
+						<span class="stat-value">{monster.speed}</span>
+					</div>
+					<div class="stat-card">
+						<span class="stat-label">Exp/HP Ratio</span>
+						<span class="stat-value">{(monster.exp / monster.hp).toFixed(2)}</span>
+					</div>
+				</div>
+			</section>
+
+			<section class="elements-section">
+				<h2>Elemental Resistances</h2>
+				<div class="table-wrap">
+					<table class="elements-table">
+						<thead>
+							<tr>
+								{Object.keys(monster.elements).map((key) => (
+									<th>{elementNames[key]}</th>
+								))}
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								{Object.entries(monster.elements).map(([_, value]) => (
+									<td class={`elem-cell elem-${elementClass(value)}`}>
+										{elementLabel(value)}
+									</td>
+								))}
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<p class="elements-legend">
+					<span class="legend-item"><span class="legend-dot dot-immune"></span> Immune (0%)</span>
+					<span class="legend-item"><span class="legend-dot dot-strong-resist"></span> Strong resist (&lt;80%)</span>
+					<span class="legend-item"><span class="legend-dot dot-resist"></span> Resist (80-99%)</span>
+					<span class="legend-item"><span class="legend-dot dot-neutral"></span> Neutral (100%)</span>
+					<span class="legend-item"><span class="legend-dot dot-weak"></span> Weak (&gt;100%)</span>
+				</p>
+			</section>
+
+			<section class="loot-section">
+				<h2>Loot</h2>
+				<ul class="loot-list">
+					{monster.loot.map((item) => (
+						<li>{item}</li>
+					))}
+				</ul>
+			</section>
+
+			<section class="location-section">
+				<h2>Location</h2>
+				<p>{monster.location}</p>
+			</section>
+
+			{related.length > 0 && (
+				<section class="related-section">
+					<h2>See Also</h2>
+					<div class="related-grid">
+						{related.map((m) => (
+							<a href={`/wiki/monsters/${m.slug}`} class="related-card card">
+								<span class="related-name">{m.name}</span>
+								<span class="related-info">HP {m.hp.toLocaleString()} | Exp {m.exp.toLocaleString()}</span>
+								<span class={`diff-badge diff-${m.difficulty.toLowerCase()}`}>{m.difficulty}</span>
+							</a>
+						))}
+					</div>
+				</section>
+			)}
+
+			<div class="back-link">
+				<a href="/wiki/monsters">&larr; Back to Monster Database</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.monster-page {
+		width: 900px;
+		max-width: calc(100% - 2em);
+	}
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb span {
+		margin: 0 0.3em;
+	}
+	.monster-meta {
+		display: flex;
+		gap: 0.5em;
+		margin-bottom: 1.25em;
+	}
+	.diff-badge {
+		display: inline-block;
+		font-size: 0.8em;
+		padding: 0.2em 0.7em;
+		border-radius: 4px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	.diff-trivial { background: rgba(120, 120, 120, 0.2); color: #aaa; }
+	.diff-easy { background: rgba(80, 180, 80, 0.2); color: #a0e0a0; }
+	.diff-medium { background: rgba(200, 168, 78, 0.2); color: var(--accent-light); }
+	.diff-hard { background: rgba(200, 100, 50, 0.2); color: #e8a870; }
+	.diff-extreme { background: rgba(200, 50, 50, 0.2); color: #e88080; }
+	.diff-boss { background: rgba(160, 50, 200, 0.2); color: #d0a0e8; }
+	.category-badge {
+		display: inline-block;
+		font-size: 0.8em;
+		padding: 0.2em 0.7em;
+		border-radius: 4px;
+		font-weight: 700;
+		background: rgba(100, 120, 220, 0.15);
+		color: #a0b0e8;
+	}
+	.monster-description {
+		font-size: 1.05em;
+		color: var(--text-muted);
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		margin-bottom: 2em;
+		line-height: 1.7;
+	}
+
+	/* Stats grid */
+	.stats-section {
+		margin-bottom: 2em;
+	}
+	.stats-section h2,
+	.elements-section h2,
+	.loot-section h2,
+	.location-section h2,
+	.related-section h2 {
+		color: var(--accent);
+		font-size: 1.3em;
+		margin-bottom: 0.75em;
+	}
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.75em;
+	}
+	.stat-card {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 1em 1.25em;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25em;
+	}
+	.stat-label {
+		font-size: 0.8em;
+		color: var(--text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+	.stat-value {
+		font-size: 1.5em;
+		font-weight: 700;
+		color: var(--text-heading);
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* Elements table */
+	.elements-section {
+		margin-bottom: 2em;
+	}
+	.table-wrap {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	.elements-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.95em;
+		text-align: center;
+	}
+	.elements-table th {
+		background: var(--bg-card);
+		color: var(--accent);
+		font-size: 0.8em;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		padding: 0.6em 0.5em;
+		white-space: nowrap;
+	}
+	.elements-table td {
+		padding: 0.75em 0.5em;
+		font-weight: 700;
+		font-size: 0.95em;
+	}
+	.elem-immune {
+		background: rgba(200, 50, 50, 0.15);
+		color: #e88080;
+	}
+	.elem-strong-resist {
+		background: rgba(200, 100, 50, 0.12);
+		color: #e8a870;
+	}
+	.elem-resist {
+		background: rgba(200, 168, 78, 0.1);
+		color: var(--accent-light);
+	}
+	.elem-neutral {
+		background: transparent;
+		color: var(--text-muted);
+	}
+	.elem-weak {
+		background: rgba(80, 180, 80, 0.12);
+		color: #a0e0a0;
+	}
+	.elements-legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1em;
+		margin-top: 0.75em;
+		font-size: 0.8em;
+		color: var(--text-muted);
+	}
+	.legend-item {
+		display: flex;
+		align-items: center;
+		gap: 0.3em;
+	}
+	.legend-dot {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 2px;
+	}
+	.dot-immune { background: rgba(200, 50, 50, 0.5); }
+	.dot-strong-resist { background: rgba(200, 100, 50, 0.5); }
+	.dot-resist { background: rgba(200, 168, 78, 0.4); }
+	.dot-neutral { background: rgba(136, 146, 164, 0.3); }
+	.dot-weak { background: rgba(80, 180, 80, 0.5); }
+
+	/* Loot */
+	.loot-section {
+		margin-bottom: 2em;
+	}
+	.loot-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.loot-list li {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 0.35em 0.8em;
+		font-size: 0.9em;
+		color: var(--text);
+	}
+
+	/* Location */
+	.location-section {
+		margin-bottom: 2em;
+	}
+	.location-section p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+	}
+
+	/* Related */
+	.related-section {
+		margin-bottom: 2em;
+	}
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 0.75em;
+	}
+	.related-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3em;
+		text-decoration: none;
+		color: inherit;
+		padding: 1em 1.25em;
+	}
+	.related-card:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+	.related-name {
+		font-weight: 700;
+		color: var(--accent);
+		font-size: 1em;
+	}
+	.related-card:hover .related-name {
+		color: var(--accent-light);
+	}
+	.related-info {
+		font-size: 0.8em;
+		color: var(--text-muted);
+	}
+
+	.back-link {
+		margin-top: 1em;
+	}
+	.back-link a {
+		color: var(--accent);
+		font-size: 0.95em;
+		font-weight: 700;
+	}
+	.back-link a:hover {
+		color: var(--accent-light);
+	}
+
+	@media (max-width: 720px) {
+		.monster-page {
+			width: 100%;
+		}
+		.stats-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.stat-value {
+			font-size: 1.25em;
+		}
+		.elements-table th,
+		.elements-table td {
+			padding: 0.5em 0.35em;
+			font-size: 0.8em;
+		}
+		.elements-legend {
+			gap: 0.6em;
+			font-size: 0.72em;
+		}
+		.related-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

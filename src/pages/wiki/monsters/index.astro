@@ -1,0 +1,327 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import monsters from '../../../data/monsters.json';
+
+const title = 'Tibia Monster Database - All Creatures Stats & Loot';
+const description = 'Complete Tibia monster database with stats, loot tables, elemental weaknesses, and locations for every creature. Your ultimate Tibia creature list reference.';
+
+const categories = [...new Set(monsters.map((m) => m.category))];
+const sortedMonsters = [...monsters].sort((a, b) => a.exp - b.exp);
+
+const difficultyOrder: Record<string, number> = { Trivial: 0, Easy: 1, Medium: 2, Hard: 3, Extreme: 4, Boss: 5 };
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "CollectionPage",
+			"name": title,
+			"description": description,
+			"publisher": { "@type": "Organization", "name": "Tibia Mobile" },
+			"mainEntityOfPage": "https://tibiamobile.com/wiki/monsters",
+			"numberOfItems": monsters.length
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main class="monsters-page">
+			<nav class="breadcrumb">
+				<a href="/wiki">Wiki</a> <span>/</span> <span>Monsters</span>
+			</nav>
+
+			<h1>Tibia Monster Database</h1>
+			<p class="lead">
+				Complete database of {monsters.length} Tibia creatures with health, experience, loot drops, elemental weaknesses, and locations.
+				Search by name or filter by category to find the monster you need.
+			</p>
+
+			<div class="controls">
+				<div class="search-wrap">
+					<input
+						type="text"
+						id="monster-search"
+						placeholder="Search monsters..."
+						autocomplete="off"
+						aria-label="Search monsters by name"
+					/>
+				</div>
+				<div class="filter-tabs" role="tablist" aria-label="Filter monsters by category">
+					<button class="filter-tab active" role="tab" aria-selected="true" data-category="all">All ({monsters.length})</button>
+					{categories.map((cat) => (
+						<button class="filter-tab" role="tab" aria-selected="false" data-category={cat}>
+							{cat} ({monsters.filter((m) => m.category === cat).length})
+						</button>
+					))}
+				</div>
+			</div>
+
+			<div class="table-wrap">
+				<table id="monster-table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>HP</th>
+							<th>Exp</th>
+							<th>Difficulty</th>
+							<th>Category</th>
+						</tr>
+					</thead>
+					<tbody>
+						{sortedMonsters.map((monster) => (
+							<tr data-name={monster.name.toLowerCase()} data-category={monster.category} data-difficulty={difficultyOrder[monster.difficulty] ?? 0}>
+								<td>
+									<a href={`/wiki/monsters/${monster.slug}`} class="monster-link">{monster.name}</a>
+								</td>
+								<td class="num">{monster.hp.toLocaleString()}</td>
+								<td class="num">{monster.exp.toLocaleString()}</td>
+								<td>
+									<span class={`diff-badge diff-${monster.difficulty.toLowerCase()}`}>{monster.difficulty}</span>
+								</td>
+								<td class="cat-cell">{monster.category}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+
+			<p class="no-results" id="no-results" style="display:none;">No monsters match your search.</p>
+
+			<section class="monster-overview">
+				<h2>About the Monster Database</h2>
+				<p>
+					This database covers monsters from Tibia 7.6, including their hit points, experience values, maximum damage output, armor ratings, movement speed, elemental resistances, loot tables, and spawn locations. Click on any monster name to see its full stats page with detailed resistance breakdowns and related creatures.
+				</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const searchInput = document.getElementById("monster-search") as HTMLInputElement;
+		const rows = document.querySelectorAll<HTMLTableRowElement>("#monster-table tbody tr");
+		const tabs = document.querySelectorAll<HTMLButtonElement>(".filter-tab");
+		const noResults = document.getElementById("no-results");
+
+		let activeCategory = "all";
+
+		function filterRows() {
+			const query = searchInput.value.toLowerCase().trim();
+			let visible = 0;
+
+			rows.forEach((row) => {
+				const name = row.dataset.name || "";
+				const category = row.dataset.category || "";
+
+				const matchesSearch = name.includes(query);
+				const matchesCategory = activeCategory === "all" || category === activeCategory;
+
+				if (matchesSearch && matchesCategory) {
+					row.style.display = "";
+					visible++;
+				} else {
+					row.style.display = "none";
+				}
+			});
+
+			if (noResults) {
+				noResults.style.display = visible === 0 ? "" : "none";
+			}
+		}
+
+		searchInput?.addEventListener("input", filterRows);
+
+		tabs.forEach((tab) => {
+			tab.addEventListener("click", () => {
+				tabs.forEach((t) => {
+					t.classList.remove("active");
+					t.setAttribute("aria-selected", "false");
+				});
+				tab.classList.add("active");
+				tab.setAttribute("aria-selected", "true");
+				activeCategory = tab.dataset.category || "all";
+				filterRows();
+			});
+		});
+	});
+</script>
+
+<style>
+	.monsters-page {
+		width: 960px;
+		max-width: calc(100% - 2em);
+	}
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb span {
+		margin: 0 0.3em;
+	}
+	.lead {
+		font-size: 1.1em;
+		color: var(--text-muted);
+		border-left: 4px solid var(--accent);
+		padding-left: 1em;
+		margin-bottom: 2em;
+	}
+	.controls {
+		margin-bottom: 1.5em;
+	}
+	.search-wrap {
+		margin-bottom: 1em;
+	}
+	#monster-search {
+		width: 100%;
+		max-width: 400px;
+		padding: 0.6em 1em;
+		font-size: 0.95em;
+		font-family: inherit;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		color: var(--text);
+		outline: none;
+		transition: border-color 0.2s;
+	}
+	#monster-search:focus {
+		border-color: var(--accent);
+	}
+	#monster-search::placeholder {
+		color: var(--text-muted);
+	}
+	.filter-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4em;
+	}
+	.filter-tab {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		color: var(--text-muted);
+		padding: 0.4em 1em;
+		border-radius: 6px;
+		cursor: pointer;
+		font-family: inherit;
+		font-size: 0.85em;
+		transition: all 0.2s;
+	}
+	.filter-tab:hover {
+		border-color: var(--accent);
+		color: var(--text-heading);
+	}
+	.filter-tab.active {
+		background: var(--accent);
+		color: var(--bg-dark);
+		border-color: var(--accent);
+		font-weight: 700;
+	}
+	.table-wrap {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.95em;
+	}
+	th {
+		background: var(--bg-card);
+		color: var(--accent);
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		padding: 0.6em 0.75em;
+		white-space: nowrap;
+		text-align: left;
+	}
+	td {
+		padding: 0.6em 0.75em;
+		border-color: var(--border);
+	}
+	.num {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	tbody tr:hover {
+		background: var(--bg-card-hover);
+	}
+	.monster-link {
+		color: var(--accent);
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.monster-link:hover {
+		color: var(--accent-light);
+		text-decoration: underline;
+	}
+	.diff-badge {
+		display: inline-block;
+		font-size: 0.8em;
+		padding: 0.15em 0.6em;
+		border-radius: 4px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	.diff-trivial { background: rgba(120, 120, 120, 0.2); color: #aaa; }
+	.diff-easy { background: rgba(80, 180, 80, 0.2); color: #a0e0a0; }
+	.diff-medium { background: rgba(200, 168, 78, 0.2); color: var(--accent-light); }
+	.diff-hard { background: rgba(200, 100, 50, 0.2); color: #e8a870; }
+	.diff-extreme { background: rgba(200, 50, 50, 0.2); color: #e88080; }
+	.diff-boss { background: rgba(160, 50, 200, 0.2); color: #d0a0e8; }
+	.cat-cell {
+		color: var(--text-muted);
+		font-size: 0.9em;
+	}
+	.no-results {
+		text-align: center;
+		color: var(--text-muted);
+		padding: 2em;
+		font-size: 1.1em;
+	}
+	.monster-overview {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 2em;
+		margin-top: 2.5em;
+	}
+	.monster-overview h2 {
+		color: var(--accent);
+		font-size: 1.3em;
+		margin-bottom: 0.75em;
+	}
+	.monster-overview p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+	}
+	@media (max-width: 720px) {
+		.monsters-page {
+			width: 100%;
+		}
+		.filter-tabs {
+			gap: 0.3em;
+		}
+		.filter-tab {
+			padding: 0.35em 0.7em;
+			font-size: 0.78em;
+		}
+		th, td {
+			padding: 0.5em 0.5em;
+			font-size: 0.85em;
+		}
+		#monster-search {
+			max-width: 100%;
+		}
+	}
+</style>

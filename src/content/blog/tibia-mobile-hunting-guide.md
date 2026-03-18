@@ -6,7 +6,7 @@ pubDate: 'Mar 14 2026'
 
 # Tibia Mobile Hunting Guide: Best Spots by Level
 
-Hunting is the core of Tibia. Whether you want experience, loot, or both, knowing where to hunt makes all the difference. This guide covers the best spots for each level range, with notes on which ones work best for mobile play.
+Hunting is the core of Tibia. Whether you want experience, loot, or both, knowing where to hunt makes all the difference. Pick the right [vocation](/wiki/vocations) and you'll level even faster. This guide covers the best spots for each level range, with notes on which ones work best for mobile play.
 
 ## Levels 1-8: Rookgaard
 
@@ -20,7 +20,7 @@ Every player starts on Rookgaard. Don't rush through it.
 
 ## Levels 8-20: Mainland Starter Hunts
 
-After leaving Rookgaard and choosing your vocation:
+After leaving Rookgaard and choosing your vocation, use the [experience calculator](/tools/experience-calculator) to plan your leveling targets:
 
 - **Trolls** (around most cities) — easy, some decent loot
 - **Rotworms** (Darashia, Edron) — great XP/h, safe to AFK
@@ -31,7 +31,7 @@ After leaving Rookgaard and choosing your vocation:
 
 ## Levels 20-35: Building Momentum
 
-- **Minotaurs** (Mintwallin) — classic hunting ground, crowded but profitable
+- **[Minotaur](/wiki/monsters/minotaur)s** (Mintwallin) — classic hunting ground, crowded but profitable
 - **Amazons** (Venore jungle) — good XP and gold
 - **Larvas** (Ankrahmun) — strong XP, bring fire resistance
 - **Dwarves** (Kazordoon mines) — decent loot and relatively safe
@@ -40,8 +40,8 @@ After leaving Rookgaard and choosing your vocation:
 
 ## Levels 35-50: Mid-Game Grind
 
-- **Cyclopses** (Mount Sternum, Edron) — very profitable
-- **Dragon Lair** (Thais) — exciting hunts, decent XP
+- **[Cyclops](/wiki/monsters/cyclops)es** (Mount Sternum, Edron) — very profitable
+- **[Dragon](/wiki/monsters/dragon) Lair** (Thais) — exciting hunts, decent XP
 - **Giant Spiders** (Plains of Havoc, Port Hope) — fast XP for mages
 - **Orc Fortress** — crowded but strong XP
 
@@ -58,7 +58,7 @@ After leaving Rookgaard and choosing your vocation:
 
 ## Levels 80+: Endgame Hunts
 
-- **Demons** — the classic high-level hunt
+- **[Demon](/wiki/monsters/demon)s** — the classic high-level hunt
 - **Hellspawns** — strong XP, high risk
 - **Serpent Spawns** — profitable and relatively safe
 - **Vampire Lords** — consistent XP in Edron
@@ -73,6 +73,3 @@ After leaving Rookgaard and choosing your vocation:
 4. **Use a ring** — life rings or rings of healing provide passive sustain
 5. **Set up hotkeys** — configure your spell bar before entering a hunt
 
-## Start Hunting Today
-
-Create your character at [Minibia.com](https://minibia.com) and start climbing through these hunting grounds. The monsters are waiting — and now you can fight them from anywhere.

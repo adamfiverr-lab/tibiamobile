@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { MINIBIA_URL } from '../consts';
@@ -25,6 +26,7 @@ const description = 'Complete beginner guide to playing Tibia on mobile. Learn v
 	<body>
 		<Header />
 		<main>
+			<Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Guide" }]} />
 			<article class="prose">
 				<h1>Tibia Mobile Beginner Guide</h1>
 				<p class="lead">
@@ -42,6 +44,7 @@ const description = 'Complete beginner guide to playing Tibia on mobile. Learn v
 						<li><a href="#first-hunts">Your First Hunts</a></li>
 						<li><a href="#leveling">Leveling Tips</a></li>
 						<li><a href="#mobile-tips">Mobile-Specific Tips</a></li>
+						<li><a href="#keep-learning">Keep Learning</a></li>
 					</ol>
 				</nav>
 
@@ -126,10 +129,26 @@ const description = 'Complete beginner guide to playing Tibia on mobile. Learn v
 					<li><strong>Start as Knight</strong> — melee combat is easier to manage on a touchscreen than kiting as a mage.</li>
 				</ul>
 
-				<div class="cta-box">
-					<p>Ready to put this guide into practice?</p>
-					<a href={MINIBIA_URL} class="cta-button" target="_blank" rel="noopener">Play Tibia Mobile on Minibia</a>
+				<h2 id="keep-learning">Keep Learning</h2>
+				<div class="resources-grid">
+					<a href="/wiki/monsters" class="card resource-link">
+						<strong>Monster Database</strong>
+						<span>Look up any creature</span>
+					</a>
+					<a href="/wiki/spells" class="card resource-link">
+						<strong>Spell List</strong>
+						<span>All spells by vocation</span>
+					</a>
+					<a href="/tools/experience-calculator" class="card resource-link">
+						<strong>XP Calculator</strong>
+						<span>Plan your leveling</span>
+					</a>
+					<a href="/blog/tibia-mobile-hunting-guide/" class="card resource-link">
+						<strong>Hunting Guide</strong>
+						<span>Best spots by level</span>
+					</a>
 				</div>
+
 			</article>
 		</main>
 		<Footer />
@@ -201,7 +220,32 @@ const description = 'Complete beginner guide to playing Tibia on mobile. Learn v
 		margin-bottom: 1em;
 		color: var(--text-heading);
 	}
+	.resources-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+		margin: 1em 0;
+	}
+	.resource-link {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25em;
+		text-decoration: none;
+		color: inherit;
+	}
+	.resource-link strong {
+		color: var(--text-heading);
+		font-size: 1em;
+	}
+	.resource-link span {
+		color: var(--text-muted);
+		font-size: 0.9em;
+	}
+	.resource-link:hover strong {
+		color: var(--accent);
+	}
 	@media (max-width: 720px) {
 		.vocation-grid { grid-template-columns: 1fr; }
+		.resources-grid { grid-template-columns: 1fr; }
 	}
 </style>

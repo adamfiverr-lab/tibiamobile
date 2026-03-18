@@ -1,0 +1,37 @@
+# TibiaMobile.com
+
+## About
+TibiaMobile.com is a community resource for playing the classic MMORPG Tibia on mobile devices. We provide guides, tools, wiki content, and tips for players who use Minibia (minibia.com) to play Tibia on their phones and tablets.
+
+## What is Tibia?
+Tibia is one of the oldest MMORPGs, created by CipSoft in 1997. It features a 2D open world with four playable vocations (Knight, Paladin, Sorcerer, Druid), hundreds of monsters, quests, and a player-driven economy.
+
+## What is Minibia?
+Minibia (minibia.com) is a browser-based Tibia client that lets players experience classic Tibia on any mobile device without downloads. It runs in any modern web browser on Android, iOS, and desktop.
+
+## Site Sections
+
+### Guides
+- /guide - Complete beginner guide to Tibia on mobile
+- /play - How to start playing Tibia on your phone
+
+### Wiki
+- /wiki/spells - Complete Tibia spell list by vocation
+- /wiki/vocations - Detailed vocation guide with stats
+- /wiki/monsters - Monster database with stats, loot, and locations
+
+### Tools
+- /tools/experience-calculator - XP calculator with real Tibia formula
+- /tools - All available Tibia tools and calculators
+
+### Blog
+- /blog - Guides, tips, and news for Tibia mobile players
+- /blog/how-to-play-tibia-on-mobile - Step-by-step mobile setup
+- /blog/tibia-vs-tibiame-whats-the-difference - Comparison guide
+- /blog/best-retro-mmorpg-mobile - Retro MMORPGs on mobile
+- /blog/tibia-vocation-guide-mobile - Vocation guide for mobile
+- /blog/tibia-mobile-hunting-guide - Hunting spots by level
+
+## Contact
+Website: https://tibiamobile.com
+Game: https://minibia.com

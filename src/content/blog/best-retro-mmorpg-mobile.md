@@ -13,7 +13,7 @@ The golden age of MMORPGs gave us some incredible games. The good news? Many of 
 **Originally released:** 1997
 **How to play on mobile:** [Minibia.com](https://minibia.com) — browser-based, no download
 
-Tibia is one of the oldest MMORPGs still running. It features a massive 2D world, four unique vocations, a complex economy, and some of the most challenging content in any MMO. Minibia brings the full experience to your mobile browser with touch controls — no app required.
+Tibia is one of the oldest MMORPGs still running. It features a massive 2D world, [four unique vocations](/wiki/vocations), a complex economy, and some of the most challenging content in any MMO. Minibia brings the full experience to your mobile browser with touch controls — no app required. See our [beginner guide](/guide) to get started.
 
 **Why it's great on mobile:**
 - Runs in any browser, no download needed
@@ -78,8 +78,4 @@ Classic MMORPGs are actually a perfect fit for mobile devices:
 - **Grinding gameplay** is ideal for short mobile sessions
 - **Social features** (chat, guilds, trading) work great on phones
 
-## The Best Choice for Classic MMORPG Fans
-
-If you want an authentic retro MMORPG experience on your phone, **Tibia via Minibia** stands out. It's the oldest game on this list, has the most content, and requires zero downloads — just open your browser and play.
-
-[Play Tibia on your phone at Minibia.com](https://minibia.com)
+Any of these games are worth trying if you miss the golden age of MMORPGs. The best part is that most of them are free to start, so you can sample a few and see which one hooks you.

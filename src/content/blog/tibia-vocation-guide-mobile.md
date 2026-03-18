@@ -6,7 +6,7 @@ pubDate: 'Mar 15 2026'
 
 # Tibia Vocation Guide for Mobile Players
 
-Choosing a vocation in Tibia is a permanent decision that shapes your entire gameplay experience. When playing on mobile, some vocations are easier to manage on a touchscreen than others. Here's everything you need to know.
+Choosing a [vocation](/wiki/vocations) in Tibia is a permanent decision that shapes your entire gameplay experience. When playing on mobile, some vocations are easier to manage on a touchscreen than others. Here's everything you need to know.
 
 ## The Four Vocations
 
@@ -73,12 +73,10 @@ From easiest to hardest on mobile:
 
 ## Tips for Any Vocation on Mobile
 
-- **Hotkey your most-used spells** — set up the spell bar before you hunt
+- **Hotkey your most-used [spells](/wiki/spells)** — set up the spell bar before you hunt
 - **Bring extra supplies** — you can't micromanage inventory easily on mobile
 - **Use mana potions generously** — running out of mana on mobile is dangerous
 - **Know your escape route** — before entering a spawn, know how to get out
 - **Practice in safe zones** — get comfortable with the controls before dangerous hunts
 
-## Ready to Choose?
-
-Head to [Minibia.com](https://minibia.com) and create your character. You'll start on Rookgaard and can experiment with basic combat before choosing your vocation at level 8. Take your time — every vocation is viable, so pick the one that matches your playstyle.
+Take your time — every vocation is viable, so pick the one that matches your playstyle. Once you've chosen, head to our [hunting guide](/blog/tibia-mobile-hunting-guide/) for the best spots at every level.

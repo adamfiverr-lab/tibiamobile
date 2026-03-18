@@ -1,0 +1,461 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+
+const title = 'Tibia Skill Calculator - Training Time Estimator';
+const description = 'Calculate how long it takes to train skills in Tibia. Estimate training time for melee, distance, shielding, and magic level.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Tibia Skill Calculator",
+			"description": description,
+			"url": "https://tibiamobile.com/tools/skill-calculator",
+			"applicationCategory": "GameApplication",
+			"operatingSystem": "Any",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			}
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href="/tools">Tools</a> <span class="sep">/</span> <span>Skill Calculator</span>
+			</nav>
+
+			<h1>Tibia Skill Calculator</h1>
+			<p class="intro">Estimate how long it takes to train your skills or magic level. Select a skill type, enter your current and target levels, and see the total tries, mana, and estimated real time required.</p>
+
+			<section class="calculator card">
+				<div class="calc-inputs">
+					<div class="input-group">
+						<label for="skill-type">Skill Type</label>
+						<select id="skill-type">
+							<option value="sword">Sword Fighting</option>
+							<option value="axe">Axe Fighting</option>
+							<option value="club">Club Fighting</option>
+							<option value="distance">Distance Fighting</option>
+							<option value="shielding">Shielding</option>
+							<option value="magic">Magic Level</option>
+						</select>
+					</div>
+					<div class="input-group">
+						<label for="current-skill">Current Level</label>
+						<input type="number" id="current-skill" min="0" max="200" value="20" />
+					</div>
+					<div class="input-group">
+						<label for="target-skill">Target Level</label>
+						<input type="number" id="target-skill" min="1" max="200" value="50" />
+					</div>
+					<button id="calc-btn" class="calc-button">Calculate</button>
+				</div>
+
+				<div id="calc-results" class="calc-results" style="display:none;">
+					<div class="result-cards">
+						<div class="result-card">
+							<span class="result-label" id="tries-label">Total Tries</span>
+							<span class="result-value" id="total-tries">--</span>
+						</div>
+						<div class="result-card">
+							<span class="result-label">Estimated Time</span>
+							<span class="result-value" id="est-time">--</span>
+						</div>
+						<div class="result-card">
+							<span class="result-label" id="rate-label">Rate</span>
+							<span class="result-value" id="rate-value">--</span>
+						</div>
+					</div>
+
+					<h3>Level-by-Level Breakdown</h3>
+					<div class="range-table-wrap">
+						<table class="range-table" id="range-table">
+							<thead>
+								<tr>
+									<th>Level</th>
+									<th id="col-tries-header">Tries to Next</th>
+									<th id="col-cumulative-header">Cumulative Tries</th>
+								</tr>
+							</thead>
+							<tbody id="range-tbody"></tbody>
+						</table>
+					</div>
+				</div>
+
+				<p id="calc-error" class="calc-error" style="display:none;"></p>
+			</section>
+
+			<section class="reference-section">
+				<h2>Tibia Skill Training Formulas</h2>
+				<p>Training skills in Tibia requires a certain number of successful attempts (tries) to advance. The number of tries grows exponentially with each level, making higher skills increasingly difficult to achieve.</p>
+
+				<h3>Melee & Distance Skills</h3>
+				<p>For sword, axe, club, distance, and shielding, the number of tries needed to advance from level N to N+1 is approximately:</p>
+				<code class="formula-block">Tries = 50 * (N - 10) ^ 1.1</code>
+				<p>For levels below 11, the tries required are minimal. As skills increase, the curve grows steeply. At a typical training rate of about 30 hits per minute, reaching high skills takes days or weeks of continuous play.</p>
+
+				<h3>Magic Level</h3>
+				<p>Magic level works differently: instead of tries, you spend mana. The mana needed to advance from level N to N+1 is approximately:</p>
+				<code class="formula-block">Mana = 1600 * 1.1 ^ N</code>
+				<p>This exponential formula means each magic level requires about 10% more mana than the last. At roughly 10 mana spent per second (using mana-intensive spells), higher magic levels take significantly longer.</p>
+
+				<h3>Training Tips</h3>
+				<ul class="tips-list">
+					<li>Use training weapons (exercise weapons) for faster offline skill gains.</li>
+					<li>For magic level, spam cheap mana-cost spells like "exura" to burn mana quickly.</li>
+					<li>Shielding trains passively when monsters attack you while blocking.</li>
+					<li>Double XP/skill events can halve your training time.</li>
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script>
+	var skillTypeEl = document.getElementById('skill-type');
+	var currentEl = document.getElementById('current-skill');
+	var targetEl = document.getElementById('target-skill');
+	var resultsEl = document.getElementById('calc-results');
+	var errorEl = document.getElementById('calc-error');
+
+	// Melee/distance/shielding: tries for level N to N+1
+	function meleeTriesForLevel(n) {
+		if (n <= 10) return 50;
+		return Math.floor(50 * Math.pow(n - 10, 1.1));
+	}
+
+	// Magic level: mana for level N to N+1
+	function manaForLevel(n) {
+		return Math.floor(1600 * Math.pow(1.1, n));
+	}
+
+	function formatNumber(n) {
+		return n.toLocaleString('en-US');
+	}
+
+	function formatTime(minutes) {
+		if (minutes < 60) {
+			return Math.ceil(minutes) + ' min';
+		}
+		var hours = minutes / 60;
+		if (hours < 24) {
+			return hours.toFixed(1) + ' hours';
+		}
+		var days = hours / 24;
+		if (days < 30) {
+			return days.toFixed(1) + ' days';
+		}
+		var months = days / 30;
+		return months.toFixed(1) + ' months';
+	}
+
+	function calculate() {
+		var skillType = skillTypeEl.value;
+		var current = parseInt(currentEl.value, 10);
+		var target = parseInt(targetEl.value, 10);
+
+		errorEl.style.display = 'none';
+		resultsEl.style.display = 'none';
+
+		if (isNaN(current) || current < 0) {
+			errorEl.textContent = 'Please enter a valid current level (0 or higher).';
+			errorEl.style.display = 'block';
+			return;
+		}
+		if (isNaN(target) || target < 1) {
+			errorEl.textContent = 'Please enter a valid target level (1 or higher).';
+			errorEl.style.display = 'block';
+			return;
+		}
+		if (target <= current) {
+			errorEl.textContent = 'Target level must be higher than current level.';
+			errorEl.style.display = 'block';
+			return;
+		}
+
+		var isMagic = skillType === 'magic';
+		var totalUnits = 0;
+		var tbody = document.getElementById('range-tbody');
+		tbody.innerHTML = '';
+
+		var rangeSize = target - current;
+		var showTable = rangeSize <= 200;
+
+		for (var n = current; n < target; n++) {
+			var units = isMagic ? manaForLevel(n) : meleeTriesForLevel(n);
+			totalUnits += units;
+
+			if (showTable) {
+				var row = document.createElement('tr');
+				row.innerHTML =
+					'<td>' + n + ' &rarr; ' + (n + 1) + '</td>' +
+					'<td>' + formatNumber(units) + '</td>' +
+					'<td>' + formatNumber(totalUnits) + '</td>';
+				tbody.appendChild(row);
+			}
+		}
+
+		if (!showTable) {
+			document.getElementById('range-table').style.display = 'none';
+		} else {
+			document.getElementById('range-table').style.display = '';
+		}
+
+		// Update labels
+		if (isMagic) {
+			document.getElementById('tries-label').textContent = 'Total Mana';
+			document.getElementById('col-tries-header').textContent = 'Mana to Next';
+			document.getElementById('col-cumulative-header').textContent = 'Cumulative Mana';
+			document.getElementById('rate-label').textContent = 'Rate (~10 mana/sec)';
+		} else {
+			document.getElementById('tries-label').textContent = 'Total Tries';
+			document.getElementById('col-tries-header').textContent = 'Tries to Next';
+			document.getElementById('col-cumulative-header').textContent = 'Cumulative Tries';
+			document.getElementById('rate-label').textContent = 'Rate (~30 hits/min)';
+		}
+
+		document.getElementById('total-tries').textContent = formatNumber(totalUnits);
+
+		// Estimate time
+		var minutes;
+		if (isMagic) {
+			// ~10 mana per second = 600 mana per minute
+			minutes = totalUnits / 600;
+		} else {
+			// ~30 hits per minute
+			minutes = totalUnits / 30;
+		}
+
+		document.getElementById('est-time').textContent = formatTime(minutes);
+		document.getElementById('rate-value').textContent = isMagic ? '10 mana/sec' : '30 hits/min';
+
+		resultsEl.style.display = 'block';
+	}
+
+	skillTypeEl.addEventListener('change', calculate);
+	document.getElementById('calc-btn').addEventListener('click', calculate);
+
+	currentEl.addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+	targetEl.addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+
+	calculate();
+</script>
+
+<style>
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb .sep {
+		margin: 0 0.4em;
+		color: var(--border);
+	}
+	.intro {
+		color: var(--text-muted);
+		font-size: 1.05em;
+		margin-bottom: 2em;
+	}
+	.calculator {
+		margin-bottom: 3em;
+	}
+	.calc-inputs {
+		display: flex;
+		gap: 1em;
+		align-items: flex-end;
+		flex-wrap: wrap;
+	}
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
+		flex: 1;
+		min-width: 120px;
+	}
+	.input-group label {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	.input-group input,
+	.input-group select {
+		padding: 0.6em 0.8em;
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		color: var(--text-heading);
+		font-size: 1.1em;
+		font-family: inherit;
+		width: 100%;
+	}
+	.input-group input:focus,
+	.input-group select:focus {
+		outline: none;
+		border-color: var(--accent);
+		box-shadow: 0 0 0 2px rgba(200, 168, 78, 0.2);
+	}
+	.input-group select option {
+		background: var(--bg-dark);
+		color: var(--text-heading);
+	}
+	.calc-button {
+		padding: 0.65em 1.8em;
+		background: var(--accent);
+		color: var(--bg-dark);
+		border: none;
+		border-radius: 6px;
+		font-weight: 700;
+		font-size: 1em;
+		font-family: inherit;
+		cursor: pointer;
+		transition: background 0.2s;
+		white-space: nowrap;
+	}
+	.calc-button:hover {
+		background: var(--accent-light);
+	}
+	.calc-error {
+		color: #e05555;
+		margin-top: 1em;
+		font-size: 0.95em;
+	}
+	.calc-results {
+		margin-top: 1.5em;
+	}
+	.calc-results h3 {
+		margin-top: 1em;
+		margin-bottom: 0.75em;
+		font-size: 1.1em;
+	}
+	.result-cards {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1em;
+		margin-bottom: 1.5em;
+	}
+	.result-card {
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1em;
+		text-align: center;
+	}
+	.result-label {
+		display: block;
+		font-size: 0.8em;
+		color: var(--text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		margin-bottom: 0.4em;
+	}
+	.result-value {
+		display: block;
+		font-size: 1.3em;
+		font-weight: 700;
+		color: var(--accent);
+	}
+	.range-table-wrap {
+		max-height: 400px;
+		overflow-y: auto;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+	}
+	.range-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9em;
+	}
+	.range-table th,
+	.range-table td {
+		padding: 0.5em 0.75em;
+		border: none;
+		border-bottom: 1px solid var(--border);
+	}
+	.range-table thead {
+		position: sticky;
+		top: 0;
+	}
+	.range-table thead th {
+		background: var(--bg-card);
+		color: var(--accent);
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	.range-table td:nth-child(2),
+	.range-table td:nth-child(3),
+	.range-table th:nth-child(2),
+	.range-table th:nth-child(3) {
+		text-align: right;
+	}
+
+	/* Reference section */
+	.reference-section {
+		margin-top: 3em;
+	}
+	.reference-section h2 {
+		color: var(--accent);
+		margin-bottom: 0.5em;
+	}
+	.reference-section h3 {
+		font-size: 1.15em;
+		margin-top: 1.5em;
+		margin-bottom: 0.4em;
+	}
+	.reference-section > p {
+		color: var(--text-muted);
+		margin-bottom: 1em;
+	}
+	.reference-section p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+	}
+	.formula-block {
+		display: block;
+		padding: 0.75em 1em;
+		margin-bottom: 1em;
+		font-size: 0.9em;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+	}
+	.tips-list {
+		color: var(--text-muted);
+		font-size: 0.95em;
+		padding-left: 1.5em;
+	}
+	.tips-list li {
+		margin-bottom: 0.5em;
+	}
+
+	@media (max-width: 720px) {
+		.calc-inputs {
+			flex-direction: column;
+		}
+		.result-cards {
+			grid-template-columns: 1fr;
+		}
+		.result-value {
+			font-size: 1.15em;
+		}
+	}
+</style>

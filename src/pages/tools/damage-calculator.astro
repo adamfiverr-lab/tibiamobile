@@ -1,0 +1,398 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+
+const title = 'Tibia Damage Calculator - Melee, Distance & Magic Damage';
+const description = 'Calculate your damage output in Tibia. Melee damage for Knights, distance damage for Paladins, and spell damage for Sorcerers and Druids.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Tibia Damage Calculator",
+			"description": description,
+			"url": "https://tibiamobile.com/tools/damage-calculator",
+			"applicationCategory": "GameApplication",
+			"operatingSystem": "Any",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			}
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href="/tools">Tools</a> <span class="sep">/</span> <span>Damage Calculator</span>
+			</nav>
+
+			<h1>Tibia Damage Calculator</h1>
+			<p class="intro">Calculate your average damage output per turn. Select your vocation and enter your stats to see minimum, maximum, and average damage.</p>
+
+			<section class="calculator card">
+				<div class="calc-inputs">
+					<div class="input-group">
+						<label for="vocation">Vocation</label>
+						<select id="vocation">
+							<option value="knight">Knight</option>
+							<option value="paladin">Paladin</option>
+							<option value="sorcerer">Sorcerer</option>
+							<option value="druid">Druid</option>
+						</select>
+					</div>
+					<div class="input-group">
+						<label for="char-level">Level</label>
+						<input type="number" id="char-level" min="1" max="10000" value="50" />
+					</div>
+					<div class="input-group">
+						<label for="skill-level" id="skill-label">Skill Level (Sword)</label>
+						<input type="number" id="skill-level" min="0" max="200" value="50" />
+					</div>
+				</div>
+
+				<div class="calc-inputs" style="margin-top: 1em;">
+					<div class="input-group" id="skill-type-group">
+						<label for="skill-type">Weapon Skill</label>
+						<select id="skill-type">
+							<option value="sword">Sword</option>
+							<option value="axe">Axe</option>
+							<option value="club">Club</option>
+						</select>
+					</div>
+					<div class="input-group" id="attack-group">
+						<label for="weapon-attack">Weapon Attack</label>
+						<input type="number" id="weapon-attack" min="0" max="100" value="35" />
+					</div>
+					<button id="calc-btn" class="calc-button">Calculate</button>
+				</div>
+
+				<div id="calc-results" class="calc-results" style="display:none;">
+					<div class="result-cards">
+						<div class="result-card">
+							<span class="result-label">Min Damage</span>
+							<span class="result-value" id="dmg-min">--</span>
+						</div>
+						<div class="result-card">
+							<span class="result-label">Max Damage</span>
+							<span class="result-value" id="dmg-max">--</span>
+						</div>
+						<div class="result-card">
+							<span class="result-label">Average Damage</span>
+							<span class="result-value" id="dmg-avg">--</span>
+						</div>
+					</div>
+
+					<div id="formula-note" class="formula-note"></div>
+				</div>
+
+				<p id="calc-error" class="calc-error" style="display:none;"></p>
+			</section>
+
+			<section class="reference-section">
+				<h2>Tibia Damage Formulas</h2>
+				<p>The damage you deal in Tibia depends on your vocation, level, relevant skill, and weapon attack value. Below are the formulas used for each combat type.</p>
+
+				<h3>Melee Damage (Knights)</h3>
+				<p>Knights deal physical damage based on their melee skill (sword, axe, or club) and weapon attack:</p>
+				<code class="formula-block">Damage = 0 to (0.085 * Attack * Skill + 0.085 * Level * Attack / 20)</code>
+				<p>Each hit is randomly distributed between 0 and the maximum. On average, you will deal about half the maximum damage per turn.</p>
+
+				<h3>Distance Damage (Paladins)</h3>
+				<p>Paladins use distance fighting and benefit from a slightly higher damage modifier:</p>
+				<code class="formula-block">Damage = 0 to (0.09 * Attack * Skill + 0.09 * Level * Attack / 20)</code>
+				<p>Distance attacks follow the same random distribution, dealing between 0 and the maximum on each shot.</p>
+
+				<h3>Magic Damage (Sorcerers & Druids)</h3>
+				<p>Spell damage for basic strike spells (like Exori Vis, Exori Flam, etc.) scales with your level and magic level:</p>
+				<code class="formula-block">Damage = Level * 0.2 + Magic Level * 3</code>
+				<p>This is an approximate formula for basic strike spells. Actual damage varies by spell and can be affected by equipment bonuses.</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script>
+	var vocationEl = document.getElementById('vocation');
+	var levelEl = document.getElementById('char-level');
+	var skillEl = document.getElementById('skill-level');
+	var skillLabelEl = document.getElementById('skill-label');
+	var skillTypeGroup = document.getElementById('skill-type-group');
+	var skillTypeEl = document.getElementById('skill-type');
+	var attackGroup = document.getElementById('attack-group');
+	var attackEl = document.getElementById('weapon-attack');
+	var resultsEl = document.getElementById('calc-results');
+	var errorEl = document.getElementById('calc-error');
+
+	function updateUI() {
+		var vocation = vocationEl.value;
+		if (vocation === 'knight') {
+			skillTypeGroup.style.display = '';
+			attackGroup.style.display = '';
+			skillTypeEl.innerHTML = '<option value="sword">Sword</option><option value="axe">Axe</option><option value="club">Club</option>';
+			skillLabelEl.textContent = 'Skill Level (' + skillTypeEl.options[skillTypeEl.selectedIndex].text + ')';
+		} else if (vocation === 'paladin') {
+			skillTypeGroup.style.display = 'none';
+			attackGroup.style.display = '';
+			skillLabelEl.textContent = 'Distance Fighting';
+		} else {
+			skillTypeGroup.style.display = 'none';
+			attackGroup.style.display = 'none';
+			skillLabelEl.textContent = 'Magic Level';
+		}
+	}
+
+	function calculate() {
+		var vocation = vocationEl.value;
+		var level = parseInt(levelEl.value, 10);
+		var skill = parseInt(skillEl.value, 10);
+		var attack = parseInt(attackEl.value, 10);
+
+		errorEl.style.display = 'none';
+		resultsEl.style.display = 'none';
+
+		if (isNaN(level) || level < 1) {
+			errorEl.textContent = 'Please enter a valid level (1 or higher).';
+			errorEl.style.display = 'block';
+			return;
+		}
+		if (isNaN(skill) || skill < 0) {
+			errorEl.textContent = 'Please enter a valid skill level (0 or higher).';
+			errorEl.style.display = 'block';
+			return;
+		}
+
+		var minDmg = 0;
+		var maxDmg = 0;
+		var formulaText = '';
+
+		if (vocation === 'knight') {
+			if (isNaN(attack) || attack < 1) {
+				errorEl.textContent = 'Please enter a valid weapon attack value (1 or higher).';
+				errorEl.style.display = 'block';
+				return;
+			}
+			maxDmg = 0.085 * attack * skill + 0.085 * level * attack / 20;
+			formulaText = 'Melee: 0 to (0.085 * ' + attack + ' * ' + skill + ' + 0.085 * ' + level + ' * ' + attack + ' / 20) = ' + Math.floor(maxDmg);
+		} else if (vocation === 'paladin') {
+			if (isNaN(attack) || attack < 1) {
+				errorEl.textContent = 'Please enter a valid weapon attack value (1 or higher).';
+				errorEl.style.display = 'block';
+				return;
+			}
+			maxDmg = 0.09 * attack * skill + 0.09 * level * attack / 20;
+			formulaText = 'Distance: 0 to (0.09 * ' + attack + ' * ' + skill + ' + 0.09 * ' + level + ' * ' + attack + ' / 20) = ' + Math.floor(maxDmg);
+		} else {
+			maxDmg = level * 0.2 + skill * 3;
+			formulaText = 'Magic: ' + level + ' * 0.2 + ' + skill + ' * 3 = ' + Math.floor(maxDmg);
+		}
+
+		maxDmg = Math.floor(maxDmg);
+		var avgDmg = Math.floor((minDmg + maxDmg) / 2);
+
+		document.getElementById('dmg-min').textContent = minDmg;
+		document.getElementById('dmg-max').textContent = maxDmg;
+		document.getElementById('dmg-avg').textContent = avgDmg;
+		document.getElementById('formula-note').textContent = formulaText;
+
+		resultsEl.style.display = 'block';
+	}
+
+	vocationEl.addEventListener('change', function() {
+		updateUI();
+		calculate();
+	});
+
+	skillTypeEl.addEventListener('change', function() {
+		skillLabelEl.textContent = 'Skill Level (' + skillTypeEl.options[skillTypeEl.selectedIndex].text + ')';
+	});
+
+	document.getElementById('calc-btn').addEventListener('click', calculate);
+
+	levelEl.addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+	skillEl.addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+	attackEl.addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+
+	updateUI();
+	calculate();
+</script>
+
+<style>
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb .sep {
+		margin: 0 0.4em;
+		color: var(--border);
+	}
+	.intro {
+		color: var(--text-muted);
+		font-size: 1.05em;
+		margin-bottom: 2em;
+	}
+	.calculator {
+		margin-bottom: 3em;
+	}
+	.calc-inputs {
+		display: flex;
+		gap: 1em;
+		align-items: flex-end;
+		flex-wrap: wrap;
+	}
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
+		flex: 1;
+		min-width: 120px;
+	}
+	.input-group label {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	.input-group input,
+	.input-group select {
+		padding: 0.6em 0.8em;
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		color: var(--text-heading);
+		font-size: 1.1em;
+		font-family: inherit;
+		width: 100%;
+	}
+	.input-group input:focus,
+	.input-group select:focus {
+		outline: none;
+		border-color: var(--accent);
+		box-shadow: 0 0 0 2px rgba(200, 168, 78, 0.2);
+	}
+	.input-group select option {
+		background: var(--bg-dark);
+		color: var(--text-heading);
+	}
+	.calc-button {
+		padding: 0.65em 1.8em;
+		background: var(--accent);
+		color: var(--bg-dark);
+		border: none;
+		border-radius: 6px;
+		font-weight: 700;
+		font-size: 1em;
+		font-family: inherit;
+		cursor: pointer;
+		transition: background 0.2s;
+		white-space: nowrap;
+	}
+	.calc-button:hover {
+		background: var(--accent-light);
+	}
+	.calc-error {
+		color: #e05555;
+		margin-top: 1em;
+		font-size: 0.95em;
+	}
+	.calc-results {
+		margin-top: 1.5em;
+	}
+	.result-cards {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1em;
+		margin-bottom: 1em;
+	}
+	.result-card {
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1em;
+		text-align: center;
+	}
+	.result-label {
+		display: block;
+		font-size: 0.8em;
+		color: var(--text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		margin-bottom: 0.4em;
+	}
+	.result-value {
+		display: block;
+		font-size: 1.3em;
+		font-weight: 700;
+		color: var(--accent);
+	}
+	.formula-note {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 0.75em 1em;
+		font-family: monospace;
+	}
+
+	/* Reference section */
+	.reference-section {
+		margin-top: 3em;
+	}
+	.reference-section h2 {
+		color: var(--accent);
+		margin-bottom: 0.5em;
+	}
+	.reference-section h3 {
+		font-size: 1.15em;
+		margin-top: 1.5em;
+		margin-bottom: 0.4em;
+	}
+	.reference-section > p {
+		color: var(--text-muted);
+		margin-bottom: 1em;
+	}
+	.reference-section p {
+		color: var(--text-muted);
+		font-size: 0.95em;
+	}
+	.formula-block {
+		display: block;
+		padding: 0.75em 1em;
+		margin-bottom: 1em;
+		font-size: 0.9em;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+	}
+
+	@media (max-width: 720px) {
+		.calc-inputs {
+			flex-direction: column;
+		}
+		.result-cards {
+			grid-template-columns: 1fr;
+		}
+		.result-value {
+			font-size: 1.15em;
+		}
+	}
+</style>

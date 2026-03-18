@@ -1,0 +1,476 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { MINIBIA_URL } from '../../consts';
+
+const title = 'Tibia Experience Calculator - XP Needed Per Level';
+const description = 'Calculate how much experience you need to reach your target level in Tibia. Instant XP calculator with the real Tibia experience formula for every level.';
+
+// Server-side: generate the full level 1-200 table
+function xpForLevel(level: number): number {
+	return Math.floor((50 / 3) * (Math.pow(level, 3) - 6 * Math.pow(level, 2) + 17 * level - 12));
+}
+
+interface LevelRow {
+	level: number;
+	totalXp: number;
+	xpToNext: number;
+}
+
+const levelData: LevelRow[] = [];
+for (let l = 1; l <= 200; l++) {
+	const totalXp = xpForLevel(l);
+	const nextXp = xpForLevel(l + 1);
+	levelData.push({
+		level: l,
+		totalXp,
+		xpToNext: nextXp - totalXp,
+	});
+}
+
+const first50 = levelData.slice(0, 50);
+const rest = levelData.slice(50);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Tibia Experience Calculator",
+			"description": description,
+			"url": "https://tibiamobile.com/tools/experience-calculator",
+			"applicationCategory": "GameApplication",
+			"operatingSystem": "Any",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			}
+		})} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href="/tools">Tools</a> <span class="sep">/</span> <span>Experience Calculator</span>
+			</nav>
+
+			<h1>Tibia Experience Calculator</h1>
+			<p class="intro">Calculate exactly how much experience (XP) you need to reach any level in Tibia. Enter your current and target levels below.</p>
+
+			<section class="calculator card">
+				<div class="calc-inputs">
+					<div class="input-group">
+						<label for="current-level">Current Level</label>
+						<input type="number" id="current-level" min="1" max="9999" value="8" />
+					</div>
+					<div class="input-group">
+						<label for="target-level">Target Level</label>
+						<input type="number" id="target-level" min="2" max="10000" value="50" />
+					</div>
+					<button id="calc-btn" class="calc-button">Calculate</button>
+				</div>
+
+				<div id="calc-results" class="calc-results" style="display:none;">
+					<div class="result-cards">
+						<div class="result-card">
+							<span class="result-label">XP Needed</span>
+							<span class="result-value" id="xp-needed">—</span>
+						</div>
+						<div class="result-card">
+							<span class="result-label">XP at Level <span id="label-current">8</span></span>
+							<span class="result-value" id="xp-current">—</span>
+						</div>
+						<div class="result-card">
+							<span class="result-label">XP at Level <span id="label-target">50</span></span>
+							<span class="result-value" id="xp-target">—</span>
+						</div>
+					</div>
+
+					<h3>XP Breakdown by Level</h3>
+					<div class="range-table-wrap">
+						<table class="range-table" id="range-table">
+							<thead>
+								<tr>
+									<th>Level</th>
+									<th>Total XP</th>
+									<th>XP to Next Level</th>
+								</tr>
+							</thead>
+							<tbody id="range-tbody"></tbody>
+						</table>
+					</div>
+				</div>
+
+				<p id="calc-error" class="calc-error" style="display:none;"></p>
+			</section>
+
+			<section class="reference-section">
+				<h2>Tibia Experience Table</h2>
+				<p>Full reference table showing the total experience points required for each level and the XP needed to advance to the next level. The Tibia experience formula is: <code>XP = (50/3) &times; (L&sup3; - 6L&sup2; + 17L - 12)</code></p>
+
+				<div class="ref-table-wrap">
+					<table class="ref-table">
+						<thead>
+							<tr>
+								<th>Level</th>
+								<th>Total XP</th>
+								<th>XP to Next Level</th>
+							</tr>
+						</thead>
+						<tbody>
+							{first50.map((row) => (
+								<tr>
+									<td>{row.level}</td>
+									<td>{row.totalXp.toLocaleString('en-US')}</td>
+									<td>{row.xpToNext.toLocaleString('en-US')}</td>
+								</tr>
+							))}
+						</tbody>
+						<tbody id="extended-rows" style="display:none;">
+							{rest.map((row) => (
+								<tr>
+									<td>{row.level}</td>
+									<td>{row.totalXp.toLocaleString('en-US')}</td>
+									<td>{row.xpToNext.toLocaleString('en-US')}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+				<button id="show-more-btn" class="show-more-btn">Show Levels 51 - 200</button>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script>
+	function xpForLevel(level) {
+		return Math.floor((50 / 3) * (Math.pow(level, 3) - 6 * Math.pow(level, 2) + 17 * level - 12));
+	}
+
+	function formatNumber(n) {
+		return n.toLocaleString('en-US');
+	}
+
+	function calculate() {
+		var currentInput = document.getElementById('current-level');
+		var targetInput = document.getElementById('target-level');
+		var resultsEl = document.getElementById('calc-results');
+		var errorEl = document.getElementById('calc-error');
+
+		var current = parseInt(currentInput.value, 10);
+		var target = parseInt(targetInput.value, 10);
+
+		errorEl.style.display = 'none';
+		resultsEl.style.display = 'none';
+
+		if (isNaN(current) || isNaN(target) || current < 1 || target < 2) {
+			errorEl.textContent = 'Please enter valid levels (current >= 1, target >= 2).';
+			errorEl.style.display = 'block';
+			return;
+		}
+		if (target <= current) {
+			errorEl.textContent = 'Target level must be higher than current level.';
+			errorEl.style.display = 'block';
+			return;
+		}
+		if (target > 10000) {
+			errorEl.textContent = 'Maximum supported target level is 10,000.';
+			errorEl.style.display = 'block';
+			return;
+		}
+
+		var xpCurrent = xpForLevel(current);
+		var xpTarget = xpForLevel(target);
+		var xpNeeded = xpTarget - xpCurrent;
+
+		document.getElementById('label-current').textContent = current;
+		document.getElementById('label-target').textContent = target;
+		document.getElementById('xp-needed').textContent = formatNumber(xpNeeded);
+		document.getElementById('xp-current').textContent = formatNumber(xpCurrent);
+		document.getElementById('xp-target').textContent = formatNumber(xpTarget);
+
+		// Build range table
+		var tbody = document.getElementById('range-tbody');
+		tbody.innerHTML = '';
+
+		// Limit table to 200 rows for performance; if range is bigger, show a note
+		var rangeSize = target - current;
+		var showTable = rangeSize <= 200;
+
+		if (showTable) {
+			for (var l = current; l <= target; l++) {
+				var row = document.createElement('tr');
+				var totalXp = xpForLevel(l);
+				var nextXp = xpForLevel(l + 1);
+				row.innerHTML =
+					'<td>' + l + '</td>' +
+					'<td>' + formatNumber(totalXp) + '</td>' +
+					'<td>' + formatNumber(nextXp - totalXp) + '</td>';
+				tbody.appendChild(row);
+			}
+			document.getElementById('range-table').style.display = '';
+		} else {
+			document.getElementById('range-table').style.display = 'none';
+		}
+
+		resultsEl.style.display = 'block';
+	}
+
+	document.getElementById('calc-btn').addEventListener('click', calculate);
+
+	// Allow Enter key to trigger calculation
+	document.getElementById('current-level').addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+	document.getElementById('target-level').addEventListener('keydown', function(e) {
+		if (e.key === 'Enter') calculate();
+	});
+
+	// Show more / show less for the reference table
+	document.getElementById('show-more-btn').addEventListener('click', function() {
+		var extended = document.getElementById('extended-rows');
+		var btn = document.getElementById('show-more-btn');
+		if (extended.style.display === 'none') {
+			extended.style.display = '';
+			btn.textContent = 'Show Less';
+		} else {
+			extended.style.display = 'none';
+			btn.textContent = 'Show Levels 51 - 200';
+		}
+	});
+
+	// Run initial calculation
+	calculate();
+</script>
+
+<style>
+	.breadcrumb {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.breadcrumb a {
+		color: var(--accent);
+	}
+	.breadcrumb .sep {
+		margin: 0 0.4em;
+		color: var(--border);
+	}
+	.intro {
+		color: var(--text-muted);
+		font-size: 1.05em;
+		margin-bottom: 2em;
+	}
+	.calculator {
+		margin-bottom: 3em;
+	}
+	.calc-inputs {
+		display: flex;
+		gap: 1em;
+		align-items: flex-end;
+		flex-wrap: wrap;
+	}
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
+		flex: 1;
+		min-width: 120px;
+	}
+	.input-group label {
+		font-size: 0.85em;
+		color: var(--text-muted);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	.input-group input {
+		padding: 0.6em 0.8em;
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		color: var(--text-heading);
+		font-size: 1.1em;
+		font-family: inherit;
+		width: 100%;
+	}
+	.input-group input:focus {
+		outline: none;
+		border-color: var(--accent);
+		box-shadow: 0 0 0 2px rgba(200, 168, 78, 0.2);
+	}
+	.calc-button {
+		padding: 0.65em 1.8em;
+		background: var(--accent);
+		color: var(--bg-dark);
+		border: none;
+		border-radius: 6px;
+		font-weight: 700;
+		font-size: 1em;
+		font-family: inherit;
+		cursor: pointer;
+		transition: background 0.2s;
+		white-space: nowrap;
+	}
+	.calc-button:hover {
+		background: var(--accent-light);
+	}
+	.calc-error {
+		color: #e05555;
+		margin-top: 1em;
+		font-size: 0.95em;
+	}
+	.calc-results {
+		margin-top: 1.5em;
+	}
+	.result-cards {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1em;
+		margin-bottom: 1.5em;
+	}
+	.result-card {
+		background: var(--bg-dark);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1em;
+		text-align: center;
+	}
+	.result-label {
+		display: block;
+		font-size: 0.8em;
+		color: var(--text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		margin-bottom: 0.4em;
+	}
+	.result-value {
+		display: block;
+		font-size: 1.3em;
+		font-weight: 700;
+		color: var(--accent);
+	}
+	.calc-results h3 {
+		margin-top: 1em;
+		margin-bottom: 0.75em;
+		font-size: 1.1em;
+	}
+	.range-table-wrap {
+		max-height: 400px;
+		overflow-y: auto;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+	}
+	.range-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9em;
+	}
+	.range-table th,
+	.range-table td {
+		padding: 0.5em 0.75em;
+		border: none;
+		border-bottom: 1px solid var(--border);
+	}
+	.range-table thead {
+		position: sticky;
+		top: 0;
+	}
+	.range-table thead th {
+		background: var(--bg-card);
+		color: var(--accent);
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	.range-table td:nth-child(2),
+	.range-table td:nth-child(3),
+	.range-table th:nth-child(2),
+	.range-table th:nth-child(3) {
+		text-align: right;
+	}
+
+	/* Reference table section */
+	.reference-section {
+		margin-top: 3em;
+	}
+	.reference-section h2 {
+		color: var(--accent);
+		margin-bottom: 0.5em;
+	}
+	.reference-section > p {
+		color: var(--text-muted);
+		margin-bottom: 1.5em;
+	}
+	.ref-table-wrap {
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		overflow: hidden;
+	}
+	.ref-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9em;
+	}
+	.ref-table th,
+	.ref-table td {
+		padding: 0.5em 0.75em;
+		border: none;
+		border-bottom: 1px solid var(--border);
+	}
+	.ref-table thead th {
+		background: var(--bg-card);
+		color: var(--accent);
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	.ref-table td:nth-child(2),
+	.ref-table td:nth-child(3),
+	.ref-table th:nth-child(2),
+	.ref-table th:nth-child(3) {
+		text-align: right;
+	}
+	.ref-table tbody tr:hover {
+		background: var(--bg-card-hover);
+	}
+	.show-more-btn {
+		display: block;
+		width: 100%;
+		margin-top: 0;
+		padding: 0.75em;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-top: none;
+		border-radius: 0 0 8px 8px;
+		color: var(--accent);
+		font-family: inherit;
+		font-size: 0.9em;
+		font-weight: 700;
+		cursor: pointer;
+		transition: background 0.2s, color 0.2s;
+	}
+	.show-more-btn:hover {
+		background: var(--bg-card-hover);
+		color: var(--accent-light);
+	}
+
+	@media (max-width: 720px) {
+		.calc-inputs {
+			flex-direction: column;
+		}
+		.result-cards {
+			grid-template-columns: 1fr;
+		}
+		.result-value {
+			font-size: 1.15em;
+		}
+	}
+</style>

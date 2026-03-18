@@ -8,17 +8,36 @@ import HeaderLink from './HeaderLink.astro';
 		<a href="/" class="logo" aria-label="Tibia Mobile Home">
 			<span class="logo-text">Tibia<strong>Mobile</strong></span>
 		</a>
-		<div class="nav-links">
+		<div class="nav-links" id="nav-links">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/play">Play Now</HeaderLink>
 			<HeaderLink href="/guide">Guide</HeaderLink>
+			<HeaderLink href="/wiki">Wiki</HeaderLink>
+			<HeaderLink href="/tools">Tools</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
+			<a href={MINIBIA_URL} class="mobile-cta" target="_blank" rel="noopener">Play on Minibia</a>
 		</div>
-		<a href={MINIBIA_URL} class="cta-button-header" target="_blank" rel="noopener">
+		<a href={MINIBIA_URL} class="cta-button-header desktop-only" target="_blank" rel="noopener">
 			Play on Minibia
 		</a>
+		<button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
 	</nav>
 </header>
+
+<script>
+	const hamburger = document.getElementById('hamburger');
+	const navLinks = document.getElementById('nav-links');
+	hamburger?.addEventListener('click', () => {
+		const isOpen = navLinks?.classList.toggle('open');
+		hamburger.setAttribute('aria-expanded', String(isOpen));
+		hamburger.classList.toggle('active');
+	});
+</script>
+
 <style>
 	header {
 		position: sticky;
@@ -65,9 +84,73 @@ import HeaderLink from './HeaderLink.astro';
 		color: var(--text-heading);
 		background: rgba(200, 168, 78, 0.1);
 	}
+	.mobile-cta {
+		display: none;
+	}
+	.hamburger {
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 8px;
+		z-index: 101;
+	}
+	.hamburger span {
+		display: block;
+		width: 24px;
+		height: 2px;
+		background: var(--text-muted);
+		border-radius: 2px;
+		transition: transform 0.3s, opacity 0.3s;
+	}
+	.hamburger.active span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+	.hamburger.active span:nth-child(2) {
+		opacity: 0;
+	}
+	.hamburger.active span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+
 	@media (max-width: 720px) {
+		.hamburger {
+			display: flex;
+		}
+		.desktop-only {
+			display: none;
+		}
 		.nav-links {
 			display: none;
+			position: absolute;
+			top: 60px;
+			left: 0;
+			right: 0;
+			background: rgba(13, 15, 20, 0.98);
+			border-bottom: 1px solid var(--border);
+			flex-direction: column;
+			padding: 1em 1.5em;
+			gap: 0.25em;
+		}
+		.nav-links.open {
+			display: flex;
+		}
+		.nav-links :global(a) {
+			padding: 0.75em;
+			font-size: 1em;
+		}
+		.mobile-cta {
+			display: block;
+			margin-top: 0.5em;
+			padding: 0.75em;
+			background: var(--cta-green);
+			color: #fff !important;
+			border-radius: 8px;
+			text-align: center;
+			font-weight: 700;
 		}
 		nav {
 			padding: 0;

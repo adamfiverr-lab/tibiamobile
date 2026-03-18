@@ -6,7 +6,7 @@ pubDate: 'Mar 18 2026'
 
 # How to Play Tibia on Mobile in 2026
 
-Tibia has been one of the most beloved MMORPGs since 1997, and now you can play it on your phone. Whether you're a returning veteran or a completely new player, this guide will show you exactly how to get Tibia running on your mobile device.
+Tibia has been one of the most beloved MMORPGs since 1997, and now you can play it on your phone. Whether you're a returning veteran or a completely new player, this guide will show you exactly how to get Tibia running on your mobile device. If you're brand new, check out our [beginner guide](/guide) for a full walkthrough.
 
 ## Can You Actually Play Tibia on Your Phone?
 
@@ -28,7 +28,7 @@ Register with a username and password. This takes less than a minute.
 
 ### 4. Create Your Character
 
-Choose a character name and you'll start on Rookgaard — the beginner island where all Tibia players begin.
+Choose a character name and you'll start on Rookgaard — the beginner island where all Tibia players begin. Once you reach level 8, you'll [choose your vocation](/wiki/vocations) — a permanent class that defines your playstyle.
 
 ### 5. Start Playing
 
@@ -39,7 +39,7 @@ That's it. You're in the game. Walk around, talk to NPCs, kill your first monste
 - **Add to Home Screen**: In your browser menu, tap "Add to Home Screen" to launch Minibia like a regular app
 - **Use WiFi**: Mobile data works, but WiFi gives a more stable connection for combat
 - **Try Landscape Mode**: Rotating your phone gives you a wider view of the game world
-- **Start as Knight**: Melee combat is the most mobile-friendly playstyle since you don't need to aim or kite
+- **Start as Knight**: Melee combat is the most mobile-friendly playstyle since you don't need to aim or kite. Learn all the available [spells](/wiki/spells) early on
 
 ## What About TibiaME?
 
@@ -56,4 +56,4 @@ Minibia has very low system requirements since it runs in your browser:
 
 ## Ready to Play?
 
-Stop reading and start hunting. Head over to [Minibia.com](https://minibia.com) and create your character. The world of Tibia is waiting — and now it fits in your pocket.
+You can get started at [Minibia.com](https://minibia.com).

@@ -1,0 +1,130 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { MINIBIA_URL } from '../../consts';
+
+const title = 'Tibia Mobile Tools & Calculators';
+const description = 'Free Tibia tools and calculators: experience calculator, XP tables, and more. Useful utilities for Tibia players.';
+
+const tools = [
+	{
+		title: 'Experience Calculator',
+		description: 'Calculate how much XP you need to reach any level. Includes a full experience table for levels 1-200 with the real Tibia formula.',
+		href: '/tools/experience-calculator',
+		icon: 'XP',
+	},
+	{
+		title: 'Damage Calculator',
+		description: 'Calculate your melee, distance, or magic damage output. Enter your vocation, level, skill, and weapon attack to see min/max/average damage per turn.',
+		href: '/tools/damage-calculator',
+		icon: 'DMG',
+	},
+	{
+		title: 'Skill Calculator',
+		description: 'Estimate how long it takes to train any skill or magic level. See total tries, mana needed, and estimated real-time training duration.',
+		href: '/tools/skill-calculator',
+		icon: 'SKL',
+	},
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Tools" }]} />
+			<h1>Tibia Tools & Calculators</h1>
+			<p class="intro">Free utilities for Tibia players. Calculators, tables, and reference tools to help you plan your adventure.</p>
+
+			<div class="tools-grid">
+				{tools.map((tool) => (
+					<a href={tool.href} class="tool-card card">
+						<div class="tool-icon">{tool.icon}</div>
+						<div class="tool-info">
+							<h2>{tool.title}</h2>
+							<p>{tool.description}</p>
+						</div>
+						<span class="tool-arrow">&rarr;</span>
+					</a>
+				))}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.intro {
+		color: var(--text-muted);
+		font-size: 1.05em;
+		margin-bottom: 2em;
+	}
+	.tools-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+	}
+	.tool-card {
+		display: flex;
+		align-items: center;
+		gap: 1.25em;
+		text-decoration: none;
+		color: inherit;
+	}
+	.tool-card:hover {
+		text-decoration: none;
+	}
+	.tool-icon {
+		flex-shrink: 0;
+		width: 56px;
+		height: 56px;
+		background: rgba(200, 168, 78, 0.1);
+		border: 1px solid var(--accent-dark);
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 700;
+		font-size: 1em;
+		color: var(--accent);
+	}
+	.tool-info {
+		flex: 1;
+	}
+	.tool-info h2 {
+		font-size: 1.2em;
+		margin: 0 0 0.25em 0;
+		color: var(--text-heading);
+	}
+	.tool-info p {
+		font-size: 0.9em;
+		color: var(--text-muted);
+		margin: 0;
+		line-height: 1.5;
+	}
+	.tool-arrow {
+		flex-shrink: 0;
+		font-size: 1.3em;
+		color: var(--accent);
+		transition: transform 0.2s;
+	}
+	.tool-card:hover .tool-arrow {
+		transform: translateX(3px);
+	}
+	@media (max-width: 720px) {
+		.tool-icon {
+			width: 44px;
+			height: 44px;
+			font-size: 0.85em;
+		}
+		.tool-info h2 {
+			font-size: 1.05em;
+		}
+	}
+</style>

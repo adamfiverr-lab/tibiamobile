@@ -26,7 +26,7 @@ Tibia is the original game that launched in 1997. It features a massive open wor
 
 **Classic Tibia features:**
 - Massive world with hundreds of cities, dungeons, and areas
-- Four vocations: Knight, Paladin, Sorcerer, Druid
+- [Four vocations](/wiki/vocations): Knight, Paladin, Sorcerer, Druid
 - Complex quest system
 - Player-driven economy and trading
 - PvP combat and guild wars
@@ -67,4 +67,4 @@ This is where [Minibia](https://minibia.com) comes in. Minibia is a browser-base
 - You want a simpler, more casual MMORPG
 - You don't care about playing the original Tibia specifically
 
-For most Tibia fans looking to play on mobile, [Minibia](https://minibia.com) is the clear choice. It's the real Tibia — just on your phone.
+For most Tibia fans, the choice depends on whether you want the full classic experience or a simpler mobile-native game. If you choose classic Tibia, our [beginner guide](/guide) will help you get started quickly.
