@@ -178,9 +178,10 @@ const popularMonsters = monsters.filter(m =>
 		transition: border-color 0.2s, background 0.2s;
 	}
 	.hub-card:hover {
-		border-color: var(--accent);
+		border-color: var(--accent-dark);
 		background: var(--bg-card-hover);
 		text-decoration: none;
+		box-shadow: 0 0 20px rgba(196, 60, 60, 0.06);
 	}
 	.hub-icon {
 		font-size: 1.5em;
@@ -243,7 +244,8 @@ const popularMonsters = monsters.filter(m =>
 	.stat {
 		font-size: 0.8em;
 		color: var(--text-muted);
-		background: rgba(200, 168, 78, 0.08);
+		background: rgba(196, 60, 60, 0.08);
+		border: 1px solid rgba(196, 60, 60, 0.1);
 		padding: 0.15em 0.5em;
 		border-radius: 4px;
 	}
@@ -264,7 +266,7 @@ const popularMonsters = monsters.filter(m =>
 		transition: border-color 0.2s;
 	}
 	.post-item:hover {
-		border-color: var(--accent);
+		border-color: var(--accent-dark);
 		text-decoration: none;
 	}
 	.post-item h3 {
@@ -291,7 +293,7 @@ const popularMonsters = monsters.filter(m =>
 		padding: 1em 1.25em;
 	}
 	details[open] {
-		border-color: var(--accent);
+		border-color: var(--accent-dark);
 	}
 	summary {
 		cursor: pointer;

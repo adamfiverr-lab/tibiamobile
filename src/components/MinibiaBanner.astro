@@ -5,13 +5,14 @@ const MINIBIA_URL = 'https://minibia.com';
 <aside class="banner" id="minibia-banner">
 	<div class="banner-inner">
 		<div class="banner-content">
-			<span class="banner-badge">Browser-Based</span>
-			<p>
-				<strong>Minibia</strong> — play classic Tibia directly in your browser. No downloads, works on mobile and desktop.
-			</p>
+			<span class="banner-badge">Play Now</span>
+			<div>
+				<p class="banner-title">Looking to play? Try <strong>Minibia</strong></p>
+				<p class="banner-desc">Classic Tibia in your browser — no downloads, works on mobile and desktop.</p>
+			</div>
 		</div>
 		<div class="banner-actions">
-			<a href={MINIBIA_URL} class="banner-link" target="_blank" rel="noopener">Visit Minibia.com</a>
+			<a href={MINIBIA_URL} class="banner-link" target="_blank" rel="noopener">minibia.com &rarr;</a>
 			<button class="banner-close" id="banner-close" aria-label="Dismiss banner">&times;</button>
 		</div>
 	</div>
@@ -33,57 +34,67 @@ const MINIBIA_URL = 'https://minibia.com';
 	.banner {
 		background: var(--bg-card);
 		border: 1px solid var(--border);
-		border-radius: 10px;
-		margin: 2em 0;
+		border-left: 3px solid var(--accent);
+		border-radius: 6px;
+		margin: 1.5em 0 2em;
 	}
 	.banner-inner {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		padding: 1em 1.25em;
-		gap: 1em;
+		gap: 1.5em;
 	}
 	.banner-content {
 		display: flex;
 		align-items: center;
-		gap: 0.75em;
+		gap: 0.85em;
 		min-width: 0;
 	}
-	.banner-content p {
+	.banner-title {
 		margin: 0;
-		font-size: 0.9em;
-		color: var(--text-muted);
-	}
-	.banner-content strong {
+		font-size: 0.92em;
 		color: var(--text-heading);
+	}
+	.banner-title strong {
+		color: var(--accent-light);
+	}
+	.banner-desc {
+		margin: 0.1em 0 0;
+		font-size: 0.78em;
+		color: var(--text-muted);
 	}
 	.banner-badge {
 		flex-shrink: 0;
-		font-size: 0.7em;
+		font-size: 0.65em;
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		color: var(--accent);
-		background: rgba(200, 168, 78, 0.1);
-		border: 1px solid rgba(200, 168, 78, 0.2);
+		letter-spacing: 0.06em;
+		color: #fff;
+		background: var(--accent);
 		padding: 0.3em 0.6em;
-		border-radius: 4px;
+		border-radius: 3px;
 		white-space: nowrap;
 	}
 	.banner-actions {
 		display: flex;
 		align-items: center;
-		gap: 0.75em;
+		gap: 0.85em;
 		flex-shrink: 0;
 	}
 	.banner-link {
-		font-size: 0.85em;
-		font-weight: 600;
-		color: var(--accent);
+		font-size: 0.82em;
+		font-weight: 700;
+		color: var(--accent-light);
 		white-space: nowrap;
+		padding: 0.4em 0.9em;
+		border: 1px solid var(--accent-dark);
+		border-radius: 5px;
+		transition: background 0.2s;
 	}
 	.banner-link:hover {
-		color: var(--accent-light);
+		background: rgba(196, 60, 60, 0.1);
+		text-decoration: none;
 	}
 	.banner-close {
 		background: none;
@@ -91,9 +102,9 @@ const MINIBIA_URL = 'https://minibia.com';
 		color: var(--text-muted);
 		font-size: 1.3em;
 		cursor: pointer;
-		padding: 0 0.25em;
+		padding: 0 0.2em;
 		line-height: 1;
-		opacity: 0.5;
+		opacity: 0.4;
 		transition: opacity 0.2s;
 	}
 	.banner-close:hover {
@@ -104,7 +115,7 @@ const MINIBIA_URL = 'https://minibia.com';
 		.banner-inner {
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 0.75em;
+			gap: 0.65em;
 		}
 		.banner-actions {
 			width: 100%;
